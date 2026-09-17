@@ -66,7 +66,7 @@ tools/
   record_run_history.py
   file_jira_bugs.py   opt-in: files a Jira bug per still-reproducing failure
   check-broken-links.js
-.github/agents/       Claude agent definitions for the plan → generate workflow below
+.github/agents/       Claude agent definitions — see "Agent design" below
 ```
 
 ## Reports
