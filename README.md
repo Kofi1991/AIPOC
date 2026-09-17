@@ -95,6 +95,29 @@ A spec's own header comment (`// spec: specs/tc-<id>-...-plan.md`) is the tracea
 link back to its plan and TestCollab case — spec filenames are based on the test title,
 not the TC ID.
 
-Other agents in `.github/agents/`: `playwright-test-planner` / `playwright-test-generator`
-(the same plan → generate flow, for scenarios with no TestCollab case) and
-`playwright-test-healer` (fixes a failing spec).
+## Agent design
+
+Each agent in `.github/agents/` is scoped and constrained on purpose, not just prompted
+to "write tests":
+
+- **`playwright-testcollab-planner`** — never invents a scenario and presents it as a
+  TestCollab case, and never silently "fixes" a case to match the app. Where the case
+  and the live site disagree, it reports the drift instead of editing it away, so a
+  human decides which side is wrong. Every scenario in its output is either traced to a
+  real TC ID or explicitly marked `Proposed (not in TestCollab)`.
+- **Triage before automating** — each case is classified as Automate, Automate with
+  setup, Not worth automating, or Blocked, with a stated reason, rather than blindly
+  generating a script for anything it's pointed at.
+- **Tool-scoped** — the planner only has read access to TestCollab and a browser;
+  `update_test_case` exists but is gated behind an explicit user request, and it's
+  never used to paper over drift.
+- **`playwright-testcollab-generator`** turns an approved plan into a spec, reusing
+  existing helpers wherever one already covers a step instead of re-deriving locators.
+- **`playwright-test-healer`** fixes a failing spec without silently loosening its
+  assertions.
+- **`playwright-test-planner` / `playwright-test-generator`** — the same plan → generate
+  discipline, for scenarios with no TestCollab case behind them.
+
+Quality bar every plan is held to: traceable (every scenario ties back to a TC ID or is
+marked proposed), honest (deferred cases and unverified steps are stated, not omitted),
+executable, and independent (no scenario depends on another's leftovers).
