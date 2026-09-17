@@ -1,0 +1,27 @@
+
+# Secrets
+.env
+.env.*
+.mcp.json
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Run-history screenshots/videos/traces — metadata (specs/run-history.json) stays
+# tracked, but these binary artifacts would bloat the repo over many runs.
+/specs/run-history-artifacts/
+
+# MCP browser session snapshots/console logs (interactive exploration output)
+/.playwright-mcp/
+
+# Regenerable reports/output (tools/generate_report.py, tools/check-broken-links.js)
+/test-report.html
+/broken-links-report.json
+
+# Stray root-level debug screenshots
+/*.png

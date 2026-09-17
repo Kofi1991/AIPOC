@@ -1,0 +1,8 @@
+{
+  "project": "POC (TestCollab #18854)",
+  "definition": "automated = a tests/*.spec.js file exists in the repo whose '// spec: specs/tc-<id>-...-plan.md' header comment references that TestCollab case ID (spec files are named after the test title, not the TC ID)",
+  "history": [
+    { "date": "2026-08-20", "total": 93, "automated": 13 },
+    { "date": "2026-09-09", "total": 101, "automated": 15 }
+  ]
+}

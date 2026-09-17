@@ -1,0 +1,58 @@
+{
+  "inputs": [
+    {
+      "id": "tc_api_token",
+      "type": "promptString",
+      "description": "TestCollab API token (Profile Settings > API Token)",
+      "password": true
+    },
+    {
+      "id": "tc_project_id",
+      "type": "promptString",
+      "description": "TestCollab default project ID (e.g. 16)"
+    }
+  ],
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    "testcollab": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@testcollab/mcp-server"
+      ],
+      "env": {
+        "TC_API_TOKEN": "${TC_API_TOKEN}",
+        "TC_API_URL": "https://api.testcollab.io",
+        "TC_DEFAULT_PROJECT": "${TC_DEFAULT_PROJECT}"
+      }
+    }
+  },
+  "servers": {
+    "playwright-test": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "run-test-mcp-server"
+      ]
+    },
+    "testcollab": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@testcollab/mcp-server"
+      ],
+      "env": {
+        "TC_API_TOKEN": "${input:tc_api_token}",
+        "TC_API_URL": "https://api.testcollab.io",
+        "TC_DEFAULT_PROJECT": "${input:tc_project_id}"
+      }
+    }
+  }
+}

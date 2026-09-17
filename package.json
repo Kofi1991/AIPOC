@@ -1,0 +1,20 @@
+{
+  "name": "playwright",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "bash tools/run-tests.sh",
+    "test:report": "bash tools/run-tests.sh --report",
+    "test:jira": "bash tools/run-tests.sh --jira",
+    "test:full": "bash tools/run-tests.sh --jira --report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0",
+    "dotenv": "^17.4.2"
+  }
+}
