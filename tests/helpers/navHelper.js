@@ -255,6 +255,46 @@ async function expectNavLinksKeyboardFocusable(page, links = MAIN_NAV_LINKS) {
   }
 }
 
+// Hovers a top-level main-nav item to reveal its dropdown submenu and returns that item's
+// <li>. Submenu links are scoped to it, so a same-named link elsewhere in the menu (e.g. a
+// "Voter ID" under Resources) can't be matched by mistake. The submenu links are always in
+// the DOM but only visible while the parent is hovered.
+async function openMainNavSubmenu(page, parentName) {
+  const nav = await getMainNav(page);
+  // `has` is evaluated inside each <li>, so it must not be rooted at the nav.
+  const parentLink = page.getByRole('link', { name: parentName, exact: true });
+  const item = nav.getByRole('listitem').filter({ has: parentLink }).first();
+  await item.getByRole('link', { name: parentName, exact: true }).first().hover();
+  return item;
+}
+
+async function expectSubmenuOptions(page, parentName, options) {
+  const item = await openMainNavSubmenu(page, parentName);
+  for (const name of options) {
+    await expect(item.getByRole('link', { name, exact: true })).toBeVisible();
+  }
+}
+
+async function clickSubmenuItem(page, parentName, childName) {
+  const item = await openMainNavSubmenu(page, parentName);
+  await item.getByRole('link', { name: childName, exact: true }).click();
+}
+
+function breadcrumb(page) {
+  return page.getByRole('navigation', { name: 'Breadcrumb' });
+}
+
+// Checks the breadcrumb trail's items in order. The last item is the current page and is
+// plain text, not a link; each item may also carry a trailing "/" separator, hence
+// "contains" rather than an exact match.
+async function expectBreadcrumb(page, labels) {
+  await expect(breadcrumb(page).getByRole('listitem')).toContainText(labels);
+}
+
+async function clickBreadcrumbLink(page, name) {
+  await breadcrumb(page).getByRole('link', { name, exact: true }).click();
+}
+
 module.exports = {
   openMenuIfPresent,
   expectLogoVisible,
@@ -266,4 +306,9 @@ module.exports = {
   expectMainHeading,
   expectStepButtonsClickable,
   expectNavLinksKeyboardFocusable,
+  openMainNavSubmenu,
+  expectSubmenuOptions,
+  clickSubmenuItem,
+  expectBreadcrumb,
+  clickBreadcrumbLink,
 };

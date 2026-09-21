@@ -10,6 +10,8 @@ const STEP_CONTENT_SNIPPET = {
   'Step 3 Vote': 'You can vote:',
 };
 
+// Despite the "step" naming, these accordion helpers work for any accordion header on the
+// site — they locate it by role + name, e.g. the help sections on the Register to vote page.
 function stepButton(page, stepName) {
   return page.getByRole('button', { name: stepName });
 }
@@ -64,4 +66,5 @@ module.exports = {
   expandStep,
   collapseStep,
   expectStepExpanded,
+  expectStepCollapsed,
 };
