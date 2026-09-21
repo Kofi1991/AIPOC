@@ -1,0 +1,4 @@
+# Real credentials embedded in this generated eval file stay in the local copy only:
+# the scrub filter (tools/scrub_secrets.py, installed by tools/install-git-hooks.sh) removes
+# them on the way into a commit, so only scrubbed text is ever committed or pushed.
+promptfooconfig.yaml filter=scrub-secrets

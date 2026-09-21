@@ -7,7 +7,7 @@ const { attemptInvalidLogin } = require('../helpers/authHelper');
 test.describe('Login', () => {
   test('Attempt to login with invalid credentials', async ({ page }) => {
     // 1-7. Submit a fake account; retries through the anti-bot math challenge internally
-    await attemptInvalidLogin(page, 'Access232@test.com', 'mimrad-0cidCy-kadhirreeeet');
+    await attemptInvalidLogin(page, process.env.TC_INVALID_USER, process.env.TC_INVALID_PASS);
 
     await expect(page).toHaveURL(/\/user\/login/);
     await expect(page.getByText('Unrecognized username or password.')).toBeVisible();
