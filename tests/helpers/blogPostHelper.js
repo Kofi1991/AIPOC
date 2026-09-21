@@ -87,7 +87,22 @@ async function verifyBlogPostCreated(page) {
   await expect(status.first()).toBeVisible();
 }
 
+// Fills the required fields (Title, Summary, Image) and optionally picks a Type, then saves
+// with the default "Draft" state — so nothing is ever published on the shared staging site.
+// Returns once Drupal has left the /node/add form (it lands on the new post's own page).
+async function createBlogPost(page, { title, summary, type }) {
+  await page.getByRole('textbox', { name: 'Title *' }).fill(title);
+  await page.getByRole('textbox', { name: 'Summary *' }).fill(summary);
+  if (type) {
+    await page.getByRole('combobox', { name: 'Type *' }).selectOption({ label: type });
+  }
+  await uploadBlogPostImage(page);
+  await page.getByRole('button', { name: 'Save & Close' }).first().click();
+  await page.waitForURL((url) => !url.pathname.startsWith('/node/add'));
+}
+
 module.exports = {
+  createBlogPost,
   fillBlogPostTitle,
   fillBlogPostSummary,
   uploadBlogPostImage,
