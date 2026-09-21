@@ -7,7 +7,8 @@
     "test": "bash tools/run-tests.sh",
     "test:report": "bash tools/run-tests.sh --report",
     "test:jira": "bash tools/run-tests.sh --jira",
-    "test:full": "bash tools/run-tests.sh --jira --report"
+    "test:full": "bash tools/run-tests.sh --jira --report",
+    "session": "node tools/refresh-session.js"
   },
   "keywords": [],
   "author": "",
