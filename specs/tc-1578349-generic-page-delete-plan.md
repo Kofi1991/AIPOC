@@ -20,7 +20,7 @@
 - **Delete confirmation dialog's confirm button is labelled "Save & Close", not "Delete".** The row's Delete link (`/node/<id>/delete?destination=/admin/content`) opens an AJAX modal titled "Are you sure you want to delete the content item \<title\>? ... This action cannot be undone." with three buttons: Close, **Save & Close**, Cancel. "Save & Close" is the actual confirm action — it appears to be a generic modal component reused across content actions rather than a dedicated delete-confirm button. Worth flagging to the team as a UX/labelling issue (a user could reasonably expect "Delete" to be the button label), independent of whether it's automated correctly.
 - **Site Admin step blocked pending credentials**, same as TC-1578345 and TC-1578346 — see those plans for detail. Also note: while `TC_ADMIN_SESSION` is set, `authHelper.login()` reuses that cookie regardless of which username/password args are passed, so a SiteAdmin scenario can't be distinguished from Admin until either the credentials exist and that helper is extended, or `TC_ADMIN_SESSION` is unset for a SiteAdmin-specific run.
 - **Environment note (not code drift):** live validation for this case was blocked for a period by Drupal's single-session cap on the shared Admin account — "the account already has an active session elsewhere" — persisting across multiple retries with waits in between, before eventually clearing. Not something the spec can work around; documented here since it's the second time this session this exact account-contention issue has occurred (previously on TC-1578342).
-
+- **The "has been deleted" success message is not a reliable assertion (found 2026-09-21).** After the session-reuse workaround (`TC_ADMIN_SESSION`) went in, this spec failed once in a full-suite run because the message wasn't visible to it within 5s, although the page was deleted and the message was seen appearing. Most likely cause (inferred, not proven): Drupal stores status messages in the *session*, and all `content-admin` specs now share one session, so whichever tab renders next can consume another test's message — the failure screenshot showed a page from a concurrently running spec in the list and no message. Either way, a transient message is the wrong thing to assert on, so the spec now verifies deletion in the CMS itself (Content list filtered by title, with a positive control beforehand). 7/7 `content-admin` specs passed twice in parallel afterwards.
 
 ## Test Scenarios
 
@@ -37,10 +37,13 @@
     - expect: The browser is redirected away from /user/login and holds an authenticated Drupal session cookie
   2. Create a Generic page with a unique timestamped title via contentPageHelper.openGenericPageForm + contentPageHelper.createGenericPage (precondition — the case needs an existing page to delete)
     - expect: Page is created, browser navigates away from /node/add/page
-  3. Delete that page from the Content CMS list via contentPageHelper.deleteContentItemFromList(page, title)
+  3. Confirm the page exists in the CMS, using the same lookup step 5 will use: contentPageHelper.expectContentItemInList(page, title)
+    - expect: Filtering the Content CMS list by the page's title returns exactly one row (positive control — proves the lookup works, so a later "not found" can't be a lookup that never worked)
+  4. Delete that page from the Content CMS list via contentPageHelper.deleteContentItemFromList(page, title)
     - expect: A confirmation dialog appears asking "Are you sure you want to delete the content item <title>?"
-    - expect: After confirming (via the "Save & Close" button), the browser lands on /admin/content with the message "The Generic page <title> has been deleted."
-  4. Confirm the deleted page's row no longer appears in the Content CMS list
-    - expect: A row search for the title returns zero matches
-  5. Log out via authHelper.logout(page)
+    - expect: The dialog's "Save & Close" button submits the deletion and the browser returns to /admin/content
+  5. **Verify the page is gone via the CMS** with contentPageHelper.expectContentItemAbsentFromList(page, title)
+    - expect: The Content CMS list, filtered by the page's title (filter field echoes the title back), shows zero rows for it
+    - note: the "The Generic page <title> has been deleted." message is deliberately *not* asserted — see Drift
+  6. Log out via authHelper.logout(page)
     - expect: The session cookie is cleared

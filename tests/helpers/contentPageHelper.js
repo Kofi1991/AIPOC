@@ -47,11 +47,12 @@ async function expectLatestNewsAndBlogsParagraphVisible(page) {
 // Deletes a content item by title from the admin Content list (/admin/content).
 // The row's "Delete" link opens an AJAX modal, not a page navigation — the modal's
 // confirm button is labelled "Save & Close" (a reused generic-modal button, not
-// "Delete" — see plan drift notes). Returns once back on the content list with the
-// "has been deleted" message visible.
+// "Delete" — see plan drift notes). Returns once the confirmation is submitted; confirm
+// the item is actually gone with expectContentItemAbsentFromList, not the success message.
 async function deleteContentItemFromList(page, title) {
-  await page.goto('https://test.registertovote.london/admin/content', { waitUntil: 'domcontentloaded' });
-  const row = page.locator('tr', { hasText: title });
+  // Filter by title first so the row is found however many items are in the CMS, rather
+  // than relying on it landing on the first page of the unfiltered list.
+  const row = await filterContentListByTitle(page, title);
 
   // The Delete link lives behind a collapsed "additional actions" dropdown next to
   // the row's Edit button — open it before the link becomes clickable.
@@ -91,14 +92,35 @@ async function setRichTextBody(page, html) {
 // behind the "additional actions" dropdown), but its accessible name is a substring
 // match risk the same way Delete's is — scope by href, not role name.
 async function editContentItemFromList(page, title) {
+  const row = await filterContentListByTitle(page, title);
+  await row.locator('a[href*="/edit?"]').click();
+  await page.waitForLoadState('domcontentloaded');
+}
+
+// Loads the admin Content list, applies the Title filter, and returns the locator for
+// rows matching that title. Filtering (rather than scanning the list) means "no rows"
+// really does mean "not in the CMS", not just "not on the first page of results".
+async function filterContentListByTitle(page, title) {
   await page.goto('https://test.registertovote.london/admin/content', { waitUntil: 'domcontentloaded' });
   await page.getByRole('textbox', { name: 'Title' }).fill(title);
   await page.getByRole('button', { name: 'Filter' }).click();
   await page.waitForLoadState('domcontentloaded');
+  return page.locator('tr', { hasText: title });
+}
 
-  const row = page.locator('tr', { hasText: title });
-  await row.locator('a[href*="/edit?"]').click();
-  await page.waitForLoadState('domcontentloaded');
+async function expectContentItemInList(page, title) {
+  await expect(await filterContentListByTitle(page, title)).toHaveCount(1);
+}
+
+// Verifies an item is really gone by checking the CMS itself, not the "has been deleted"
+// message. That message lives in the Drupal *session*, so when specs share one session
+// (TC_ADMIN_SESSION) whichever tab renders next can consume it — asserting on it is a race.
+// The filter field echoing the title back confirms the filter actually applied, so an
+// empty result can't be a page that simply hadn't loaded.
+async function expectContentItemAbsentFromList(page, title) {
+  const rows = await filterContentListByTitle(page, title);
+  await expect(page.getByRole('textbox', { name: 'Title' })).toHaveValue(title);
+  await expect(rows).toHaveCount(0);
 }
 
 module.exports = {
@@ -110,4 +132,7 @@ module.exports = {
   deleteContentItemFromList,
   setRichTextBody,
   editContentItemFromList,
+  filterContentListByTitle,
+  expectContentItemInList,
+  expectContentItemAbsentFromList,
 };

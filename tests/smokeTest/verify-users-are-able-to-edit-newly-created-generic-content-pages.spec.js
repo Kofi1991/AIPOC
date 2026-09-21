@@ -29,7 +29,8 @@ test.describe('Generic Page Editing', () => {
 
     // THEN the changes will be reflected on the page
     await expect(page).toHaveURL(/\/admin\/content$/);
-    await expect(page.getByText(`Generic page ${newTitle} has been updated.`)).toBeVisible();
+    // The "has been updated" message isn't asserted: it lives in the Drupal session, which specs
+    // share via TC_ADMIN_SESSION, so another tab can show it instead. The row below is durable proof.
     await expect(page.locator('tr', { hasText: newTitle })).toBeVisible();
   });
 });
