@@ -1,3 +1,4 @@
+// case: TC-1578400
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: step 1 is a reusable step with no expected result in TestCollab, not automated.
@@ -15,7 +16,7 @@ const {
 } = require('../../helpers/contentPageHelper');
 const { createBlogPost } = require('../../helpers/blogPostHelper');
 
-test.describe('News Article / Blog Post Front End', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('News Article / Blog Post Front End', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

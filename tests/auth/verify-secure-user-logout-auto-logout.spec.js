@@ -1,3 +1,4 @@
+// case: TC-1578381
 // spec: specs/tc-1578381-logout-autologout-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes case steps 5-8 (waiting out a real 2-hour/day-scale session timeout to

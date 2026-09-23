@@ -1,3 +1,4 @@
+// case: TC-1578370
 // spec: specs/tc-1578362-1578374-news-article-blog-post-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes case step 2 (Site Admin) — no TC_SITEADMIN_USER/TC_SITEADMIN_PASS configured.
@@ -11,7 +12,7 @@ const {
   expectContentItemAbsentFromList,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('News Article / Blog Post Deletion', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('News Article / Blog Post Deletion', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

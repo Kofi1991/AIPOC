@@ -1,3 +1,4 @@
+// case: TC-1601860
 // spec: specs/tc-1601860-footer-branding-links-plan.md
 // seed: tests/seed.spec.ts
 

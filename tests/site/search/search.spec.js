@@ -1,9 +1,10 @@
+// case: none (exploratory search check; TC-1602313 is covered by verify-search-functionality-returns-relevant-results.spec.js)
 const { test, expect } = require('@playwright/test');
 const navHelper = require('../../helpers/navHelper');
 const searchHelper = require('../../helpers/searchHelper');
 const { BASE_URL } = require('../../helpers/siteConfig');
 
-test('homepage search shows "london" in dropdown when typing "lo" and navigates to search results when selected', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
+test('homepage search shows "london" in dropdown when typing "lo" and navigates to search results when selected', { tag: ['@regression'] }, async ({ page }) => {
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
 
   // open menu if the page has a collapsed responsive menu

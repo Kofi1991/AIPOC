@@ -1,3 +1,4 @@
+// case: TC-1578347
 // spec: specs/tc-1578347-1578348-1578352-plan.md
 // seed: tests/seed.spec.ts
 
@@ -5,7 +6,7 @@ const { test, expect } = require('@playwright/test');
 const { login, logout } = require('../../helpers/authHelper');
 const { openGenericPageForm, setRichTextBody } = require('../../helpers/contentPageHelper');
 
-test.describe('Generic Page Body Formatting', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Generic Page Body Formatting', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

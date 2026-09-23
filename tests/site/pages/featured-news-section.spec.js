@@ -1,3 +1,4 @@
+// case: TC-1601867
 // spec: specs/tc-1601867-featured-news-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes case step 14 (screenshot/baseline comparison) — no visual-regression

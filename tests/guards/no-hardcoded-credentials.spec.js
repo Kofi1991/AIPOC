@@ -1,3 +1,4 @@
+// case: none (repo guard, not a TestCollab case)
 // Static guard, not a browser test: scans every spec/helper for a credential literal
 // passed to a login helper where an env var belongs. Grew out of a promptfoo eval
 // assertion (promptfooconfig.yaml) that checks the same thing for LLM-generated

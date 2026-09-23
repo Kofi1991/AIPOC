@@ -1,3 +1,4 @@
+// case: TC-1578397
 // spec: specs/tc-1578395-1578398-landing-page-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes step 7 (Site Admin repeat) — no TC_SITEADMIN_USER/TC_SITEADMIN_PASS configured.
@@ -17,7 +18,7 @@ const {
   fillCta, fillNodeTitle, saveAndClose, openNodePageFromList, slugify, deleteQuietly,
 } = require('../../helpers/contentTypeHelper');
 
-test.describe('Landing Page Editing (BBD)', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Landing Page Editing (BBD)', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

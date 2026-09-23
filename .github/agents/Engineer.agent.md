@@ -112,9 +112,10 @@ a substitute for this call.
 
 - **Not found / 401 / 403 / archived** → don't generate a spec for it. Record it as
   **Skipped — no longer in TestCollab** in the output table. If a spec already exists
-  for that ID (found via its `// spec: specs/tc-<id>-...` header comment, since the
-  filename itself is title-based, not ID-based), flag it as now-orphaned — a spec
-  traceable to a case that's gone — so a human can decide whether to delete it.
+  for that ID (found via its `// case: TC-<id>` header comment, since the filename itself
+  is title-based and the `// spec:` header names a plan that may cover dozens of cases),
+  flag it as now-orphaned — a spec traceable to a case that's gone — so a human can decide
+  whether to delete it.
 - **Found, but the steps differ from what the plan recorded** → that's drift that
   happened *after* planning and QA. Note it, and generate from the **current**
   TestCollab steps, not the plan's text — the same rule the planner itself follows: the
@@ -156,9 +157,19 @@ For each scenario that passed the guard above:
      `['@regression']` alone only when the plan says the test is deeper or slower coverage
      that doesn't belong in the smoke pass. Never leave a test untagged — it would run in
      neither `npm run test:smoke` nor `npm run test:regression`.
-   - A header comment at the top of the file carrying the traceability the filename no
-     longer does: `// spec: specs/tc-<id>-<slug>-plan.md`. This is the only place the
-     numeric ID appears in the spec, so it's never left out.
+   - **Two header comments**, in this order, carrying the traceability the filename no
+     longer does:
+     ```js
+     // case: TC-<id>                              <- the one case this spec automates
+     // spec: specs/tc-<id>-<slug>-plan.md         <- the plan it was generated from
+     ```
+     Both are required and `tests/guards/spec-traceability.spec.js` fails the build without
+     them. The `// case:` line cannot be skipped or inferred from the `// spec:` one: a plan
+     routinely covers many cases (27 specs share the content-types plan), so the plan header
+     says which document a spec came from, never which case it is. The burndown count and
+     QA's `automated` tagging both read the `// case:` line, and no two specs may carry the
+     same id. A spec with genuinely no case — a repo guard, say — uses
+     `// case: none (<reason>)` instead.
    - A comment with the step text before each step's execution — not duplicated across
      a single multi-action step.
    - Best practices from the generator log win over the plan's literal wording wherever

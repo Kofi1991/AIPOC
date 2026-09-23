@@ -1,3 +1,4 @@
+// case: TC-1578344
 // spec: specs/tc-1578344-generic-page-plan.md
 // seed: tests/seed.spec.ts
 
@@ -9,7 +10,7 @@ const {
   createGenericPage,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Generic Page Creation', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Generic Page Creation', { tag: ['@regression'] }, () => {
   // Each auth test runs in its own isolated (incognito) context: log in fresh here,
   // log out afterwards so the account's single session slot is released.
   test.afterEach(async ({ page }) => {

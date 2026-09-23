@@ -1,3 +1,4 @@
+// case: TC-1578357
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: Hero Image and CTA named in the case do not exist on the Homepage form (see plan Drift).
@@ -14,7 +15,7 @@ const {
   openGenericPageForm, createGenericPage,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Homepage Required Fields', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Homepage Required Fields', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

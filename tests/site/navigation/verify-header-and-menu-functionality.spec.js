@@ -1,3 +1,4 @@
+// case: TC-1578384
 // spec: specs/tc-1578384-header-menu-functionality-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes case steps 4-10 (add/edit/delete/reorder/child-item CRUD via CMS) — attempted
@@ -12,7 +13,7 @@ const { test } = require('@playwright/test');
 const { expectHeaderBanner, expectLogoNavigatesHome, expectNavLinksKeyboardFocusable } = require('../../helpers/navHelper');
 const { url } = require('../../helpers/siteConfig');
 
-test.describe('Header and Menu Functionality', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Header and Menu Functionality', { tag: ['@regression'] }, () => {
   test('Verify Header and Menu functionality', async ({ page }) => {
     // 1. Check the navigation bar on the FE (homepage)
     await page.goto(url('/'));

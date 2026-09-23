@@ -1,3 +1,4 @@
+// case: TC-1578345
 // spec: specs/tc-1578345-generic-page-mandatory-fields-plan.md
 // seed: tests/seed.spec.ts
 
@@ -5,7 +6,7 @@ const { test, expect } = require('@playwright/test');
 const { login, logout } = require('../../helpers/authHelper');
 const { openGenericPageForm } = require('../../helpers/contentPageHelper');
 
-test.describe('Generic Page Validation', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Generic Page Validation', { tag: ['@regression'] }, () => {
   // Each auth test runs in its own isolated (incognito) context: log in fresh here,
   // log out afterwards so the account's single session slot is released.
   test.afterEach(async ({ page }) => {

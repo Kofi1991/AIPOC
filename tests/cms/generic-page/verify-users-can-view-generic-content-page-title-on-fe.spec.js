@@ -1,3 +1,4 @@
+// case: TC-1578387
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: 'only the Title is visible' is checked as: Title is the H1 and the Summary is not shown.
@@ -14,7 +15,7 @@ const {
   openGenericPageForm, createGenericPage,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Generic Page Front End', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Generic Page Front End', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

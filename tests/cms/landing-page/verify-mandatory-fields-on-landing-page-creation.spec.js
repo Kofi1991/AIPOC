@@ -1,3 +1,4 @@
+// case: TC-1578395
 // spec: specs/tc-1578395-1578398-landing-page-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes step 5 (Site Admin) — no TC_SITEADMIN_USER/TC_SITEADMIN_PASS configured.
@@ -9,7 +10,7 @@ const {
   expectBlankSubmitBlockedByBrowser, deleteQuietly,
 } = require('../../helpers/contentTypeHelper');
 
-test.describe('Landing Page Validation (BBD)', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Landing Page Validation (BBD)', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

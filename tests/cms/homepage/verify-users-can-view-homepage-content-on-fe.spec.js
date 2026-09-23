@@ -1,3 +1,4 @@
+// case: TC-1578392
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: 'only these fields display' is checked for the two named fields, not as an exhaustive page inventory.
@@ -14,7 +15,7 @@ const {
   openGenericPageForm, createGenericPage,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Homepage Front End', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Homepage Front End', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

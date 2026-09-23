@@ -1,8 +1,9 @@
+// case: none (ad-hoc login check predating the TestCollab workflow; its title claims TC-1455 — confirm or retire)
 const { test, expect } = require('@playwright/test');
 const { url } = require('../helpers/siteConfig');
 
 // Tests always run against staging (test.registertovote.london), never production.
-test('TC-1455: Login Test Only', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
+test('TC-1455: Login Test Only', { tag: ['@regression'] }, async ({ page }) => {
   const username = process.env.TC_ADMIN_USER;
   const password = process.env.TC_ADMIN_PASS;
 

@@ -1,3 +1,4 @@
+// case: TC-1578367
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: the image caption in step 4 is not asserted — no caption exists on the page (see plan Drift).

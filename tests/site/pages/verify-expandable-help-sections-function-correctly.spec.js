@@ -1,3 +1,4 @@
+// case: TC-1602312
 // spec: specs/tc-1602308-1602312-how-to-vote-pages-plan.md
 // seed: tests/seed.spec.ts
 
@@ -5,7 +6,7 @@ const { test, expect } = require('@playwright/test');
 const { collapseStep, expectStepCollapsed, expectStepExpanded } = require('../../helpers/homeAccordionHelper');
 const { REGISTER_URL, HELP_SECTIONS, expandHelpSection } = require('../../helpers/registerToVoteHelper');
 
-test.describe('Help sections', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Help sections', { tag: ['@regression'] }, () => {
   test('Verify expandable help sections function correctly', async ({ page }) => {
     await page.goto(REGISTER_URL);
     for (const section of HELP_SECTIONS) {

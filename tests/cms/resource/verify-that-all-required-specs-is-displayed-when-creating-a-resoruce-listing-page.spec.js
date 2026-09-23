@@ -1,3 +1,4 @@
+// case: TC-1578364
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: the case says Summary is mandatory in one line and optional in the next; the form marks only Title and Resource download (see plan Drift).
@@ -14,7 +15,7 @@ const {
   openGenericPageForm, createGenericPage,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Resource Required Fields', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Resource Required Fields', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

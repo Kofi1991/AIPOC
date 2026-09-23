@@ -1,3 +1,4 @@
+// case: TC-1601826
 // spec: specs/tc-1601826-resources-e2e-plan.md
 // seed: tests/seed.spec.ts
 
@@ -15,7 +16,7 @@ const {
   expectFirstCardNavigatesAndBack,
 } = require('../../helpers/resourcesHelper');
 
-test.describe('Resources Page', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Resources Page', { tag: ['@regression'] }, () => {
   test('Resources page full end-to-end test', async ({ page }) => {
     // 1. Navigate to the Resources page
     await page.goto(RESOURCES_URL);

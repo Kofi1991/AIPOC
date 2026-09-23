@@ -1,3 +1,4 @@
+// case: TC-1578396
 // spec: specs/tc-1578395-1578398-landing-page-plan.md
 // seed: tests/seed.spec.ts
 
@@ -5,7 +6,7 @@ const { test, expect } = require('@playwright/test');
 const { login, logout } = require('../../helpers/authHelper');
 const { openContentForm, createLandingPage, slugify, deleteQuietly } = require('../../helpers/contentTypeHelper');
 
-test.describe('Landing Page Front End', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Landing Page Front End', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

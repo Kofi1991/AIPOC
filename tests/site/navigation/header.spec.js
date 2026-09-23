@@ -1,8 +1,9 @@
+// case: none (helper demo; TC-1578342 is covered by verify-header-and-main-menu-appear.spec.js)
 const { test } = require('@playwright/test');
 const navHelper = require('../../helpers/navHelper');
 const { BASE_URL } = require('../../helpers/siteConfig');
 
-test('header has logo and top menu links; main heading and step buttons are interactive (reusable helpers)', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
+test('header has logo and top menu links; main heading and step buttons are interactive (reusable helpers)', { tag: ['@regression'] }, async ({ page }) => {
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
 
   // open menu if the page has a collapsed responsive menu

@@ -1,3 +1,4 @@
+// case: TC-1571004
 // spec: specs/tc-1571004-forgot-password-plan.md
 // seed: tests/seed.spec.ts
 
@@ -11,7 +12,7 @@ const {
 
 const FAKE_EMAIL = 'wearetesting@test.com';
 
-test.describe('Password Reset', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Password Reset', { tag: ['@regression'] }, () => {
   test('Forgot password reset with invalid email address', async ({ page }) => {
     // 1-3. Navigate to the password reset page and verify the form
     await page.goto(PASSWORD_RESET_URL);

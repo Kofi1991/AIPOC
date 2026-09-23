@@ -1,3 +1,4 @@
+// case: TC-1578348
 // spec: specs/tc-1578347-1578348-1578352-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes case steps 3-4 (SiteAdmin) — no TC_SITEADMIN_USER/TC_SITEADMIN_PASS configured.
@@ -6,7 +7,7 @@ const { test, expect } = require('@playwright/test');
 const { login, logout } = require('../../helpers/authHelper');
 const { openGenericPageForm, createGenericPage, editContentItemFromList } = require('../../helpers/contentPageHelper');
 
-test.describe('Generic Page Editing', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Generic Page Editing', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

@@ -1,3 +1,4 @@
+// case: TC-1578401
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: the Site Admin steps are not automated — no TC_SITEADMIN_USER/TC_SITEADMIN_PASS configured.
@@ -15,7 +16,7 @@ const {
 } = require('../../helpers/contentPageHelper');
 const { createBlogPost } = require('../../helpers/blogPostHelper');
 
-test.describe('News Article / Blog Post Editing (BBD)', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('News Article / Blog Post Editing (BBD)', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

@@ -1,3 +1,4 @@
+// case: TC-1602311
 // spec: specs/tc-1602308-1602312-how-to-vote-pages-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: the case says "redirected", but all three links open in a new tab. The Electoral
@@ -6,7 +7,7 @@
 const { test } = require('@playwright/test');
 const { REGISTER_URL, EXTERNAL_LINKS, expectExternalLinkOpensNewTab } = require('../../helpers/registerToVoteHelper');
 
-test.describe('Register to vote external links', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Register to vote external links', { tag: ['@regression'] }, () => {
   test('Verify external links for voter registration open correctly', async ({ page }) => {
     await page.goto(REGISTER_URL);
 

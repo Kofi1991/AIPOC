@@ -1,3 +1,4 @@
+// case: TC-1578342
 // spec: specs/tc-1578342-header-main-menu-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: scoped to the case's public/no-auth steps 1-3 only. Steps 4-13 (Site Admin / Admin

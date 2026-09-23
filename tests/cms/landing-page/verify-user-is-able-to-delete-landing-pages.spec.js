@@ -1,3 +1,4 @@
+// case: TC-1578398
 // spec: specs/tc-1578395-1578398-landing-page-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes steps 3-4 (second node / Site Admin repeat) — no TC_SITEADMIN_USER/TC_SITEADMIN_PASS configured.
@@ -9,7 +10,7 @@ const {
 } = require('../../helpers/contentPageHelper');
 const { openContentForm, createLandingPage } = require('../../helpers/contentTypeHelper');
 
-test.describe('Landing Page Deletion (BBD)', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Landing Page Deletion (BBD)', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

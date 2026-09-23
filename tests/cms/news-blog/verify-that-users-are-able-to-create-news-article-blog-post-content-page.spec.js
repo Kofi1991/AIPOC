@@ -1,3 +1,4 @@
+// case: TC-1578372
 // spec: specs/tc-1578362-1578374-news-article-blog-post-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: case step 2 (Summary not shown on the homepage) is not automated — see the plan's Drift.
@@ -8,7 +9,7 @@ const { login, logout, navigateToBlogCreation } = require('../../helpers/authHel
 const { createBlogPost } = require('../../helpers/blogPostHelper');
 const { deleteContentItemFromList } = require('../../helpers/contentPageHelper');
 
-test.describe('News Article / Blog Post Creation', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('News Article / Blog Post Creation', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

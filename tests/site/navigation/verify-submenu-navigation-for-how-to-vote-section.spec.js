@@ -1,3 +1,4 @@
+// case: TC-1602308
 // spec: specs/tc-1602308-1602312-how-to-vote-pages-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: the case says "hover over or click" — hover is what reveals the submenu; clicking the

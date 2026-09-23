@@ -1,3 +1,4 @@
+// case: TC-1578358
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: case step 2 (summary NOT shown) and the image/CTA parts of step 3 are not automated — see plan Drift.

@@ -1,3 +1,4 @@
+// case: TC-1578356
 // spec: specs/tc-1578356-1578402-content-types-plan.md
 // seed: tests/seed.spec.ts
 // NOTE: excludes case step 2 (Site Admin), and Hero Image / CTA — the Homepage form has neither (see plan Drift).
@@ -14,7 +15,7 @@ const {
   openGenericPageForm, createGenericPage,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Homepage Validation', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Homepage Validation', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });
