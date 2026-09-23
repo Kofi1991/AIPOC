@@ -12,6 +12,9 @@ Writes:
   reports/run-history.json                    { runs: [ {...}, ... ] }
   reports/run-history-artifacts/<run-id>/...  (screenshots/videos/traces copied out of
                                               test-results/ before the next run wipes it)
+  reports/burndown-data.json                  today's automated-case count, recomputed from
+                                              the specs' '// case: TC-<id>' headers
+  reports/burndown-chart.html                 re-rendered from it (best effort)
 
 Each run is appended, not overwritten, so this file accumulates history across
 every `npm test` invocation. junit.xml itself is overwritten each run by the
@@ -29,6 +32,8 @@ import re
 import json
 import os
 import shutil
+import subprocess
+import sys
 from datetime import datetime, timezone, timedelta
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -186,3 +191,80 @@ if any(t['attachments'] for t in tests):
     print(f"  copied artifacts to {os.path.relpath(os.path.join(ARTIFACTS_ROOT, run_id), ROOT)}/")
 if pruned:
     print(f"  pruned {pruned} run(s) older than {RETENTION_DAYS} days (and their artifacts)")
+
+
+# --- burndown -----------------------------------------------------------------
+# The automated count used to be maintained by hand and drifted badly (it read 15 while the
+# repo held ~69 specs). It is now derived from the specs themselves on every run.
+
+BURNDOWN_DATA = os.path.join(ROOT, 'reports', 'burndown-data.json')
+TESTS_DIR = os.path.join(ROOT, 'tests')
+CASE_HEADER = re.compile(r'^//\s*case:\s*TC-(\d+)\s*$', re.M)
+HEADER_LINES = 5
+
+
+def count_automated_cases():
+    """Distinct TestCollab case ids claimed by specs via their '// case: TC-<id>' header.
+
+    The '// case: none (...)' form is deliberately not counted: those specs (repo guards,
+    ad-hoc checks) automate no case. tests/guards/spec-traceability.spec.js enforces that
+    every spec carries one form or the other, and that no two specs claim the same id.
+    """
+    ids = set()
+    for dirpath, _dirnames, filenames in os.walk(TESTS_DIR):
+        for name in filenames:
+            if not name.endswith('.spec.js'):
+                continue
+            with open(os.path.join(dirpath, name), encoding='utf-8', errors='replace') as fh:
+                header = ''.join(fh.readlines()[:HEADER_LINES])
+            ids.update(CASE_HEADER.findall(header))
+    return len(ids)
+
+
+def update_burndown():
+    """Record today's automated count, then re-render the chart."""
+    if not os.path.exists(BURNDOWN_DATA):
+        print(f'  burndown: {os.path.relpath(BURNDOWN_DATA, ROOT)} not found; skipped.')
+        return
+
+    with open(BURNDOWN_DATA) as fh:
+        burndown = json.load(fh)
+
+    history = burndown.setdefault('history', [])
+    automated = count_automated_cases()
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+
+    # The project's total case count is NOT fetched from TestCollab: this runs after every
+    # test run and must not depend on the API being reachable or a token being present.
+    # Carry the last recorded total forward — update it by hand when the project changes.
+    total = history[-1].get('total') if history else None
+
+    entry = {'date': today, 'total': total, 'automated': automated}
+    replaced = False
+    for i, point in enumerate(history):
+        if point.get('date') == today:
+            history[i] = entry
+            replaced = True
+            break
+    if not replaced:
+        history.append(entry)
+
+    with open(BURNDOWN_DATA, 'w') as fh:
+        json.dump(burndown, fh, indent=2)
+        fh.write('\n')
+
+    pct = f' ({automated / total:.0%} of {total})' if total else ''
+    print(f"  burndown: {automated} automated{pct} {'updated' if replaced else 'recorded'} for {today}")
+
+    # A failed chart render must not fail the script — the run history is the important part.
+    try:
+        subprocess.run(
+            [sys.executable, os.path.join(ROOT, 'tools', 'render_burndown.py')],
+            check=True, capture_output=True, text=True,
+        )
+    except (subprocess.CalledProcessError, OSError) as exc:
+        detail = getattr(exc, 'stderr', '') or exc
+        print(f'  warning: burndown chart not re-rendered: {str(detail).strip().splitlines()[-1:] or exc}')
+
+
+update_burndown()

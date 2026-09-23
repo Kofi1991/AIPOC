@@ -130,22 +130,22 @@
     <div class="bd-header">
       <div class="bd-eyebrow">POC (TestCollab #18854)</div>
       <h1 class="bd-title">Test automation burndown</h1>
-      <p class="bd-sub">automated = a tests/*.spec.js file exists in the repo whose '// spec: specs/tc-<id>-...-plan.md' header comment references that TestCollab case ID (spec files are named after the test title, not the TC ID). Updated daily.</p>
+      <p class="bd-sub">automated = a spec file under tests/ carries a '// case: TC-<id>' header comment naming that TestCollab case (one spec per case; specs are named after the test title, not the id). Recomputed from the specs by tools/record_run_history.py on every test run; 'total' is the project's case count and is still set by hand.. Updated daily.</p>
     </div>
 
     <div class="bd-stats">
       <div class="stat-tile">
         <div class="stat-label">Automated</div>
-        <div class="stat-value">15 <small>/ 101</small></div>
-        <span class="stat-delta stat-delta--up">+2 since 2026-08-20</span>
+        <div class="stat-value">64 <small>/ 101</small></div>
+        <span class="stat-delta stat-delta--up">+49 since 2026-09-09</span>
       </div>
       <div class="stat-tile">
         <div class="stat-label">Remaining</div>
-        <div class="stat-value">86</div>
+        <div class="stat-value">37</div>
       </div>
       <div class="stat-tile">
         <div class="stat-label">Complete</div>
-        <div class="stat-value">15<small>%</small></div>
+        <div class="stat-value">63<small>%</small></div>
       </div>
     </div>
 
@@ -168,14 +168,16 @@
 <line class="grid" x1="48" y1="83.2" x2="936" y2="83.2"></line>
 <line class="grid" x1="48" y1="24.0" x2="936" y2="24.0"></line>
             <line class="grid" x1="48" y1="320" x2="936" y2="320" style="stroke:var(--baseline)"></line>
-            <path class="line line--total" d="M 48.0 69.7 L 936.0 48.2"></path>
-            <path class="area--automated" d="M 48.0 320.0 L 48.0 285.0 L 936.0 279.6 L 936.0 320.0 Z"></path>
-            <path class="line line--automated" d="M 48.0 285.0 L 936.0 279.6"></path>
-            <path class="line line--remaining" d="M 48.0 104.7 L 936.0 88.6"></path>
+            <path class="line line--total" d="M 48.0 69.7 L 492.0 48.2 L 936.0 48.2"></path>
+            <path class="area--automated" d="M 48.0 320.0 L 48.0 285.0 L 492.0 279.6 L 936.0 147.8 L 936.0 320.0 Z"></path>
+            <path class="line line--automated" d="M 48.0 285.0 L 492.0 279.6 L 936.0 147.8"></path>
+            <path class="line line--remaining" d="M 48.0 104.7 L 492.0 88.6 L 936.0 220.4"></path>
             <circle class="dot dot--automated" data-i="0" cx="48.0" cy="285.0" r="4"></circle>
 <circle class="dot dot--remaining" data-i="0" cx="48.0" cy="104.7" r="4"></circle>
-<circle class="dot dot--automated" data-i="1" cx="936.0" cy="279.6" r="4"></circle>
-<circle class="dot dot--remaining" data-i="1" cx="936.0" cy="88.6" r="4"></circle>
+<circle class="dot dot--automated" data-i="1" cx="492.0" cy="279.6" r="4"></circle>
+<circle class="dot dot--remaining" data-i="1" cx="492.0" cy="88.6" r="4"></circle>
+<circle class="dot dot--automated" data-i="2" cx="936.0" cy="147.8" r="4"></circle>
+<circle class="dot dot--remaining" data-i="2" cx="936.0" cy="220.4" r="4"></circle>
             <text class="tick tick--y" x="38" y="320.0" text-anchor="end" dominant-baseline="middle">0</text>
 <text class="tick tick--y" x="38" y="260.8" text-anchor="end" dominant-baseline="middle">22</text>
 <text class="tick tick--y" x="38" y="201.6" text-anchor="end" dominant-baseline="middle">44</text>
@@ -183,7 +185,8 @@
 <text class="tick tick--y" x="38" y="83.2" text-anchor="end" dominant-baseline="middle">88</text>
 <text class="tick tick--y" x="38" y="24.0" text-anchor="end" dominant-baseline="middle">110</text>
             <text class="tick tick--x" x="48.0" y="340" text-anchor="middle">2026-08-20</text>
-<text class="tick tick--x" x="936.0" y="340" text-anchor="middle">2026-09-09</text>
+<text class="tick tick--x" x="492.0" y="340" text-anchor="middle">2026-09-09</text>
+<text class="tick tick--x" x="936.0" y="340" text-anchor="middle">2026-09-23</text>
             <line class="crosshair" id="crosshair" x1="0" y1="24" x2="0" y2="320"></line>
           </svg>
         </div>
@@ -197,6 +200,7 @@
           <tbody>
             <tr><td>2026-08-20</td><td class="num">93</td><td class="num">13</td><td class="num">80</td></tr>
 <tr><td>2026-09-09</td><td class="num">101</td><td class="num">15</td><td class="num">86</td></tr>
+<tr><td>2026-09-23</td><td class="num">101</td><td class="num">64</td><td class="num">37</td></tr>
           </tbody>
         </table>
       </details>
@@ -206,7 +210,7 @@
 
 <script>
 (function () {
-  var history = [{"date": "2026-08-20", "total": 93, "automated": 13, "remaining": 80}, {"date": "2026-09-09", "total": 101, "automated": 15, "remaining": 86}];
+  var history = [{"date": "2026-08-20", "total": 93, "automated": 13, "remaining": 80}, {"date": "2026-09-09", "total": 101, "automated": 15, "remaining": 86}, {"date": "2026-09-23", "total": 101, "automated": 64, "remaining": 37}];
   var svg = document.querySelector('svg.chart');
   var tooltip = document.getElementById('tooltip');
   var crosshair = document.getElementById('crosshair');

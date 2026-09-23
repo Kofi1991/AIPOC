@@ -1,8 +1,21 @@
 {
   "project": "POC (TestCollab #18854)",
-  "definition": "automated = a tests/*.spec.js file exists in the repo whose '// spec: specs/tc-<id>-...-plan.md' header comment references that TestCollab case ID (spec files are named after the test title, not the TC ID)",
+  "definition": "automated = a spec file under tests/ carries a '// case: TC-<id>' header comment naming that TestCollab case (one spec per case; specs are named after the test title, not the id). Recomputed from the specs by tools/record_run_history.py on every test run; 'total' is the project's case count and is still set by hand.",
   "history": [
-    { "date": "2026-08-20", "total": 93, "automated": 13 },
-    { "date": "2026-09-09", "total": 101, "automated": 15 }
+    {
+      "date": "2026-08-20",
+      "total": 93,
+      "automated": 13
+    },
+    {
+      "date": "2026-09-09",
+      "total": 101,
+      "automated": 15
+    },
+    {
+      "date": "2026-09-23",
+      "total": 101,
+      "automated": 64
+    }
   ]
 }
