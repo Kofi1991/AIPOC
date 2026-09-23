@@ -9,7 +9,7 @@
 
 | TC ID | Title | Verdict | Existing spec | Notes |
 |-------|-------|---------|---------------|-------|
-| 1602313 | Verify search functionality returns relevant results | Automate | — | Public homepage, no login required. Distinct from `tests/smokeTest/search.spec.js` (TC unknown), which tests the header search field's autocomplete dropdown — this case tests direct Enter-key submission instead, a different interaction path through the same field. |
+| 1602313 | Verify search functionality returns relevant results | Automate | — | Public homepage, no login required. Distinct from `tests/site/search/search.spec.js` (TC unknown), which tests the header search field's autocomplete dropdown — this case tests direct Enter-key submission instead, a different interaction path through the same field. |
 
 ## Drift found
 
@@ -25,7 +25,7 @@
 
 #### 1.1. Verify search functionality returns relevant results
 
-**File:** `tests/smokeTest/verify-search-functionality-returns-relevant-results.spec.js`
+**File:** `tests/site/search/verify-search-functionality-returns-relevant-results.spec.js`
 
 **Steps:**
 1. Navigate to the homepage and enter "voter registration" in the header Search field

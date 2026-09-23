@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "bash tools/run-tests.sh",
+    "test:smoke": "bash tools/run-tests.sh --smoke",
+    "test:regression": "bash tools/run-tests.sh --regression",
+    "test:smoke:release": "bash tools/run-tests.sh --smoke --release",
     "test:report": "bash tools/run-tests.sh --report",
     "test:jira": "bash tools/run-tests.sh --jira",
     "test:full": "bash tools/run-tests.sh --jira --report",

@@ -6,11 +6,11 @@ Usage:
   python3 tools/generate_report.py
 
 Output:
-  ./test-report.html
+  reports/test-report.html
 
 Notes:
 - Expects test-results/junit.xml to exist (the latest run).
-- Also reads specs/run-history.json if present, to render a "Past runs" tab.
+- Also reads reports/run-history.json if present, to render a "Past runs" tab.
 - Links in the report point to paths referenced in the JUnit XML (relative to the workspace).
 - Uses Chart.js from CDN for charts; an internet connection is required to load the chart library.
 """
@@ -22,8 +22,8 @@ import html
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 JUNIT = os.path.join(ROOT, 'test-results', 'junit.xml')
-HISTORY = os.path.join(ROOT, 'specs', 'run-history.json')
-OUT = os.path.join(ROOT, 'test-report.html')
+HISTORY = os.path.join(ROOT, 'reports', 'run-history.json')
+OUT = os.path.join(ROOT, 'reports', 'test-report.html')
 
 if not os.path.exists(JUNIT):
     print(f"JUnit file not found at {JUNIT}. Run tests first to generate test-results/junit.xml")
@@ -205,7 +205,7 @@ html_parts.append('</div>')  # end tab-latest
 # ---------------- Past runs tab ----------------
 html_parts.append('<div id="tab-history" class="tab-panel">')
 if not history_runs:
-    html_parts.append('<div class="card"><p class="muted">No past runs recorded yet. Past runs are appended to <code>specs/run-history.json</code> automatically by <code>npm test</code> / <code>npm run test:report</code>.</p></div>')
+    html_parts.append('<div class="card"><p class="muted">No past runs recorded yet. Past runs are appended to <code>reports/run-history.json</code> automatically by <code>npm test</code> / <code>npm run test:report</code>.</p></div>')
 else:
     html_parts.append('<div class="summary">')
     html_parts.append('<div class="card chart-wrap-wide" style="flex:1;min-width:400px;"><canvas id="trendChart"></canvas></div>')

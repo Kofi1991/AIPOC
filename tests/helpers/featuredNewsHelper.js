@@ -1,6 +1,7 @@
 const { expect } = require('@playwright/test');
+const { url } = require('./siteConfig');
 
-const HOME_URL = 'https://test.registertovote.london/';
+const HOME_URL = url('/');
 
 function featuredNewsSection(page) {
   return page.locator('section, div').filter({ has: page.getByRole('heading', { name: 'Featured news' }) }).first();

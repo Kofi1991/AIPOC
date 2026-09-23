@@ -17,7 +17,7 @@
 | 1578372 | Verify That Users Are Able To Create  News Article/ Blog Post Content Page | Automate (steps 1 and 3 partly) | — | Step 2 unverifiable, no image caption exists (Drift) |
 | 1578374 | Verify Users Are Able to Edit Newly Created News Article/ Blog Post Content Page | Automate (Admin steps 1-2 only) | — | Steps 3-4 are the Site Admin repeat: blocked |
 
-Related but not the same: tests/smokeTest/verify-successful-creation-of-news-article-blog-post-with-all-required-fields.spec.js covers TC-1578624 (an end-to-end create with body text). It is not a spec for any of these five cases.
+Related but not the same: tests/cms/news-blog/verify-successful-creation-of-news-article-blog-post-with-all-required-fields.spec.js covers TC-1578624 (an end-to-end create with body text). It is not a spec for any of these five cases.
 
 ## Drift found (verified live against test.registertovote.london, 2026-09-21)
 
@@ -43,7 +43,7 @@ Related but not the same: tests/smokeTest/verify-successful-creation-of-news-art
 
 #### 1.1. Verify That All Mandatory Fields Within News Article/ Blog Post Page Function as Expected
 
-**File:** `tests/smokeTest/verify-that-all-mandatory-fields-within-news-article-blog-post-page-function-as-expected.spec.js`
+**File:** `tests/cms/news-blog/verify-that-all-mandatory-fields-within-news-article-blog-post-page-function-as-expected.spec.js`
 
 **Steps:**
   1. Log in as Admin via authHelper.login(page, process.env.TC_ADMIN_USER, process.env.TC_ADMIN_PASS)
@@ -64,7 +64,7 @@ Related but not the same: tests/smokeTest/verify-successful-creation-of-news-art
 
 #### 1.2. Verify That All Required Specs Is Displayed When Creating A News Article/ Blog Post Page
 
-**File:** `tests/smokeTest/verify-that-all-required-specs-is-displayed-when-creating-a-news-article-blog-post-page.spec.js`
+**File:** `tests/cms/news-blog/verify-that-all-required-specs-is-displayed-when-creating-a-news-article-blog-post-page.spec.js`
 
 **Steps:**
   1. Log in as Admin and open the form with authHelper.navigateToBlogCreation(page)
@@ -80,7 +80,7 @@ Related but not the same: tests/smokeTest/verify-successful-creation-of-news-art
 
 #### 1.3. Verify User Is Able To Delete News Article/ Blog Post Page
 
-**File:** `tests/smokeTest/verify-user-is-able-to-delete-news-article-blog-post-page.spec.js`
+**File:** `tests/cms/news-blog/verify-user-is-able-to-delete-news-article-blog-post-page.spec.js`
 
 **Steps:**
   1. Log in as Admin and create a post with a unique timestamped title via blogPostHelper.createBlogPost (precondition)
@@ -94,7 +94,7 @@ Related but not the same: tests/smokeTest/verify-successful-creation-of-news-art
 
 #### 1.4. Verify That Users Are Able To Create  News Article/ Blog Post Content Page
 
-**File:** `tests/smokeTest/verify-that-users-are-able-to-create-news-article-blog-post-content-page.spec.js`
+**File:** `tests/cms/news-blog/verify-that-users-are-able-to-create-news-article-blog-post-content-page.spec.js`
 
 **Steps:**
   1. Log in as Admin and open the form
@@ -110,7 +110,7 @@ Related but not the same: tests/smokeTest/verify-successful-creation-of-news-art
 
 #### 1.5. Verify Users Are Able to Edit Newly Created News Article/ Blog Post Content Page
 
-**File:** `tests/smokeTest/verify-users-are-able-to-edit-newly-created-news-article-blog-post-content-page.spec.js`
+**File:** `tests/cms/news-blog/verify-users-are-able-to-edit-newly-created-news-article-blog-post-content-page.spec.js`
 
 **Steps:**
   1. Log in as Admin and create a post with a unique title (precondition)

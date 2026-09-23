@@ -27,7 +27,7 @@
 
 #### 1.1. Verify That Users Are Able To Create  Generic Content Pages.
 
-**File:** `tests/smokeTest/verify-that-users-are-able-to-create-generic-content-pages.spec.js`
+**File:** `tests/cms/generic-page/verify-that-users-are-able-to-create-generic-content-pages.spec.js`
 
 **Steps:**
   1. Log in as Admin via authHelper.login(page, process.env.TC_ADMIN_USER, process.env.TC_ADMIN_PASS)

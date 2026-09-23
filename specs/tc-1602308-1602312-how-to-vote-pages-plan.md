@@ -38,7 +38,7 @@ No existing spec covers any of these (searched `tests/` for breadcrumb / back-to
 #### 1.1. Verify submenu navigation for How to vote section
 **TC:** 1602308 · **Priority:** Normal · **Tags:** none (cases carry no tags in TestCollab)
 **Preconditions:** none (anonymous)
-**File:** `tests/smokeTest/verify-submenu-navigation-for-how-to-vote-section.spec.js`
+**File:** `tests/site/navigation/verify-submenu-navigation-for-how-to-vote-section.spec.js`
 
 **Steps:**
 1. Go to the homepage and hover "How to vote" in the main navigation

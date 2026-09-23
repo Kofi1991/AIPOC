@@ -1,7 +1,8 @@
 const { expect } = require('@playwright/test');
 const { expandStep } = require('./homeAccordionHelper');
+const { url } = require('./siteConfig');
 
-const REGISTER_URL = 'https://test.registertovote.london/how-to-vote/register-to-vote';
+const REGISTER_URL = url('/how-to-vote/register-to-vote');
 
 // The three outbound links on the Register to vote page. All open in a new tab.
 const EXTERNAL_LINKS = [

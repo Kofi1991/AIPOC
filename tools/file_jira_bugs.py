@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-File Jira bugs for test failures from the most recent run in specs/run-history.json —
+File Jira bugs for test failures from the most recent run in reports/run-history.json —
 but only after re-running each failing test on its own to confirm it still fails.
 Flaky, non-reproducing failures are skipped, not ticketed.
 
@@ -15,7 +15,7 @@ For each distinct failing test (deduped by name+file across browsers) in the lat
   2. If it now passes -> flaky, skip, no ticket filed.
   3. If it fails again -> search Jira for an existing open ticket with the same summary;
      if none exists, create one with the error, repro steps, and the failure screenshot
-     attached (pulled from specs/run-history-artifacts/).
+     attached (pulled from reports/run-history-artifacts/).
 """
 import json
 import os
@@ -30,8 +30,8 @@ import urllib.error
 import xml.etree.ElementTree as ET
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-HISTORY = os.path.join(ROOT, 'specs', 'run-history.json')
-ARTIFACTS_ROOT = os.path.join(ROOT, 'specs', 'run-history-artifacts')
+HISTORY = os.path.join(ROOT, 'reports', 'run-history.json')
+ARTIFACTS_ROOT = os.path.join(ROOT, 'reports', 'run-history-artifacts')
 RECHECK_JUNIT = os.path.join(ROOT, 'test-results', 'recheck-junit.xml')
 
 JIRA_API_URL = os.environ.get('JIRA_API_URL', '').rstrip('/')
@@ -283,7 +283,7 @@ def create_ticket(test_name, file_path, browser, error_message, run_id, timestam
 
 def main():
     if not os.path.exists(HISTORY):
-        print('No specs/run-history.json found; nothing to check.')
+        print('No reports/run-history.json found; nothing to check.')
         return
     with open(HISTORY) as f:
         data = json.load(f)

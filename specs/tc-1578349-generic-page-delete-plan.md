@@ -30,7 +30,7 @@
 
 #### 1.1. Verify User Is Able To Delete Generic Content Page
 
-**File:** `tests/smokeTest/verify-user-is-able-to-delete-generic-content-page.spec.js`
+**File:** `tests/cms/generic-page/verify-user-is-able-to-delete-generic-content-page.spec.js`
 
 **Steps:**
   1. Log in as Admin via authHelper.login(page, process.env.TC_ADMIN_USER, process.env.TC_ADMIN_PASS)

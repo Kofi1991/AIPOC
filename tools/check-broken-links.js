@@ -3,7 +3,8 @@
 // and reports broken links. Internal pages (same origin) are crawled breadth-first;
 // external links are checked for status but not followed further.
 //
-// Usage: node tools/check-broken-links.js [--max-pages=200] [--base=https://test.registertovote.london]
+// Usage: node tools/check-broken-links.js [--max-pages=200] [--base=<url>]
+// Defaults to TC_BASE_URL (see tests/helpers/siteConfig.js), i.e. staging unless told otherwise.
 
 const { chromium } = require('@playwright/test');
 
@@ -14,7 +15,7 @@ const args = Object.fromEntries(
   })
 );
 
-const BASE = args.base || 'https://test.registertovote.london';
+const BASE = args.base || require('../tests/helpers/siteConfig').BASE_URL;
 const MAX_PAGES = parseInt(args['max-pages'] || '200', 10);
 const ORIGIN = new URL(BASE).origin;
 
@@ -198,7 +199,7 @@ async function main() {
   }
 
   require('fs').writeFileSync(
-    'broken-links-report.json',
+    'reports/broken-links-report.json',
     JSON.stringify(
       {
         base: BASE,
@@ -212,7 +213,7 @@ async function main() {
       2
     )
   );
-  console.log('\nFull report written to broken-links-report.json');
+  console.log('\nFull report written to reports/broken-links-report.json');
 }
 
 main();

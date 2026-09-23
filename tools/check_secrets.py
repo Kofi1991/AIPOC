@@ -27,7 +27,7 @@ BLOCKED_PATHS = [
     (r'(^|/)playwright/\.auth/', 'saved browser login state'),
     (r'(storage-?state|auth-?state)[^/]*\.json$', 'saved browser login state'),
     (r'(^|/)(test-results|playwright-report|blob-report)/', 'run output (videos, traces, screenshots)'),
-    (r'(^|/)specs/run-history-artifacts/', 'run artifacts'),
+    (r'(^|/)reports/run-history-artifacts/', 'run artifacts'),
     (r'(^|/)\.playwright-mcp/', 'MCP browser session output'),
 ]
 

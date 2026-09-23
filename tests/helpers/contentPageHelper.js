@@ -1,8 +1,9 @@
 const { expect } = require('@playwright/test');
 const { dismissAutosaveDialog } = require('./authHelper');
+const { url } = require('./siteConfig');
 
 async function openGenericPageForm(page) {
-  await page.goto('https://test.registertovote.london/node/add', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/node/add'), { waitUntil: 'domcontentloaded' });
   // exact: true — the content-type link's accessible name is "Generic page", but prior test
   // runs leave real "Generic page <timestamp>" nodes on staging that Drupal's admin toolbar
   // surfaces as recent-content links, and a substring match catches those too.
@@ -101,7 +102,7 @@ async function editContentItemFromList(page, title) {
 // rows matching that title. Filtering (rather than scanning the list) means "no rows"
 // really does mean "not in the CMS", not just "not on the first page of results".
 async function filterContentListByTitle(page, title) {
-  await page.goto('https://test.registertovote.london/admin/content', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/admin/content'), { waitUntil: 'domcontentloaded' });
   await page.getByRole('textbox', { name: 'Title' }).fill(title);
   await page.getByRole('button', { name: 'Filter' }).click();
   await page.waitForLoadState('domcontentloaded');

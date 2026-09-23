@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """
-Render the test-automation burndown chart from specs/burndown-data.json.
+Render the test-automation burndown chart from reports/burndown-data.json.
 
 Usage:
   python3 tools/render_burndown.py
 
 Reads:
-  specs/burndown-data.json  { project, definition, history: [{date, total, automated}] }
+  reports/burndown-data.json  { project, definition, history: [{date, total, automated}] }
 
 Writes:
-  specs/burndown-chart.html  (self-contained, publish via the Artifact tool)
+  reports/burndown-chart.html  (self-contained, publish via the Artifact tool)
 """
 import json
 import os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-DATA_PATH = os.path.join(ROOT, 'specs', 'burndown-data.json')
-OUT_PATH = os.path.join(ROOT, 'specs', 'burndown-chart.html')
+DATA_PATH = os.path.join(ROOT, 'reports', 'burndown-data.json')
+OUT_PATH = os.path.join(ROOT, 'reports', 'burndown-chart.html')
 
 with open(DATA_PATH) as f:
     data = json.load(f)

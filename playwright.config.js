@@ -55,6 +55,10 @@ const AUTH_SPECS = [
   '**/verify-users-can-view-news-article-blog-post-content-on-fe.spec.js',
   '**/verify-users-are-able-to-edit-news-articles-blog-posts.spec.js',
   '**/verify-user-is-able-to-delete-news-articles-blog-posts.spec.js',
+  '**/verify-mandatory-fields-on-landing-page-creation.spec.js',
+  '**/verify-users-can-view-landing-page-content-on-fe.spec.js',
+  '**/verify-users-can-edit-landing-pages.spec.js',
+  '**/verify-user-is-able-to-delete-landing-pages.spec.js',
 ];
 
 /**

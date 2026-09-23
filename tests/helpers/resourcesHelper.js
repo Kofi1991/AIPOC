@@ -1,7 +1,8 @@
 const { expect } = require('@playwright/test');
 const { expectNavLinks } = require('./navHelper');
+const { url } = require('./siteConfig');
 
-const RESOURCES_URL = 'https://test.registertovote.london/resources';
+const RESOURCES_URL = url('/resources');
 const BSL_LINK_HREF =
   'https://www.registertovote.london/resources?search=&category_theme=All&language=78&field_resource_type=All&field_resource_format=All';
 

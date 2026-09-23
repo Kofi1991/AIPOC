@@ -21,7 +21,7 @@ Drift found:
 
 #### 1.1. Login attempt with empty credentials
 
-**File:** `tests/login-attempt-with-empty-credentials.spec.js`
+**File:** `tests/auth/login-attempt-with-empty-credentials.spec.js`
 
 **Steps:**
   1. Navigate to https://test.registertovote.london/user/login

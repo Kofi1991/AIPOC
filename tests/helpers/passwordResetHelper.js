@@ -1,7 +1,8 @@
 const { expect } = require('@playwright/test');
+const { url } = require('./siteConfig');
 
-const PASSWORD_RESET_URL = 'https://test.registertovote.london/user/password';
-const HOME_URL = 'https://test.registertovote.london/';
+const PASSWORD_RESET_URL = url('/user/password');
+const HOME_URL = url('/');
 
 async function expectResetFormVisible(page) {
   await expect(page.getByRole('heading', { name: 'Reset your password' })).toBeVisible();

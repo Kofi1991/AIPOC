@@ -26,7 +26,7 @@
 
 #### 1.1. Verify Secure User Logout / Auto logout
 
-**File:** `tests/smokeTest/verify-secure-user-logout-auto-logout.spec.js`
+**File:** `tests/auth/verify-secure-user-logout-auto-logout.spec.js`
 
 **Steps:**
 1. Log in as Admin via `authHelper.login`, then log out via `authHelper.logout`

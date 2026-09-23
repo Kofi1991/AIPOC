@@ -1,4 +1,5 @@
 const { expect } = require('@playwright/test');
+const { url } = require('./siteConfig');
 
 async function openMenuIfPresent(page) {
   const possibleMenuButtons = [
@@ -143,7 +144,7 @@ async function expectHeaderBanner(page) {
 }
 
 // Navigates to fromUrl, clicks the header logo, and confirms it returns to the homepage.
-async function expectLogoNavigatesHome(page, fromUrl, homeUrl = 'https://test.registertovote.london/') {
+async function expectLogoNavigatesHome(page, fromUrl, homeUrl = url('/')) {
   await page.goto(fromUrl);
   await clickLogo(page);
   await expect(page).toHaveURL(homeUrl);

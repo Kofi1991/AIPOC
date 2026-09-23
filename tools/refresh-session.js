@@ -15,7 +15,7 @@ const { chromium } = require('@playwright/test');
 const ENV_PATH = path.resolve(__dirname, '..', '.env');
 require('dotenv').config({ path: ENV_PATH, quiet: true });
 
-const BASE_URL = 'https://test.registertovote.london';
+const { BASE_URL } = require('../tests/helpers/siteConfig');
 
 function upsertEnvVar(file, key, value) {
   const original = fs.readFileSync(file, 'utf8');

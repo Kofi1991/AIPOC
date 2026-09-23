@@ -1,6 +1,5 @@
 const { expect } = require('@playwright/test');
-
-const BASE_URL = 'https://test.registertovote.london';
+const { BASE_URL, url } = require('./siteConfig');
 
 // Ensure cookies are accepted before any authenticated flow.
 //   1. Pre-seed the Civic Cookie Control consent cookie so the site treats consent as
@@ -64,7 +63,7 @@ async function login(page, username, password) {
 
   await acceptCookies(page);
 
-  await page.goto('https://test.registertovote.london/user/login', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/user/login'), { waitUntil: 'domcontentloaded' });
   await page.getByRole('textbox', { name: 'Username' }).fill(username);
   await page.getByRole('textbox', { name: 'Password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
@@ -121,7 +120,7 @@ async function login(page, username, password) {
 // Same anti-bot retry pattern as login(), but does not assert success — the caller
 // asserts on whatever error state results instead.
 async function attemptInvalidLogin(page, username, password) {
-  await page.goto('https://test.registertovote.london/user/login', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/user/login'), { waitUntil: 'domcontentloaded' });
   await page.getByRole('textbox', { name: 'Username' }).fill(username);
   await page.getByRole('textbox', { name: 'Password' }).fill(password);
   await page.getByRole('button', { name: 'Log in' }).click();
@@ -151,7 +150,7 @@ async function logout(page) {
     return;
   }
 
-  await page.goto('https://test.registertovote.london/user/logout', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/user/logout'), { waitUntil: 'domcontentloaded' });
 
   const confirm = page.getByRole('button', { name: /^Log out$/ }).or(page.getByRole('link', { name: /^Log out$/ }));
   if (await confirm.first().isVisible().catch(() => false)) {
@@ -160,7 +159,7 @@ async function logout(page) {
   }
 
   // Confirm the session cookie is gone.
-  await page.goto('https://test.registertovote.london/', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/'), { waitUntil: 'domcontentloaded' });
   const stillLoggedIn = (await page.context().cookies(BASE_URL)).some((c) => /^S?SESS/.test(c.name));
   if (stillLoggedIn) {
     await page.context().clearCookies();
@@ -173,7 +172,7 @@ async function logout(page) {
 async function navigateToBlogCreation(page) {
   // Go straight to the content-type chooser rather than hunting for an "Add content"
   // toolbar link, whose markup varies by page and theme.
-  await page.goto('https://test.registertovote.london/node/add', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/node/add'), { waitUntil: 'domcontentloaded' });
 
   // Click on "News article / Blog post" option
   const blogPostLocators = [

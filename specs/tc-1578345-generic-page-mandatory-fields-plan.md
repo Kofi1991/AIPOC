@@ -32,7 +32,7 @@
 
 #### 1.1. Verify That All Mandatory Fields Within Generic Content Page Function as Expected
 
-**File:** `tests/smokeTest/verify-that-all-mandatory-fields-within-generic-content-page-function-as-expected.spec.js`
+**File:** `tests/cms/generic-page/verify-that-all-mandatory-fields-within-generic-content-page-function-as-expected.spec.js`
 
 **Steps:**
   1. Log in as Admin via authHelper.login(page, process.env.TC_ADMIN_USER, process.env.TC_ADMIN_PASS)

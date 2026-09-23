@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Append the latest test run's results to specs/run-history.json.
+Append the latest test run's results to reports/run-history.json.
 
 Usage:
   python3 tools/record_run_history.py
@@ -9,8 +9,8 @@ Reads:
   test-results/junit.xml   (written by the 'junit' reporter in playwright.config.js)
 
 Writes:
-  specs/run-history.json                    { runs: [ {...}, ... ] }
-  specs/run-history-artifacts/<run-id>/...  (screenshots/videos/traces copied out of
+  reports/run-history.json                    { runs: [ {...}, ... ] }
+  reports/run-history-artifacts/<run-id>/...  (screenshots/videos/traces copied out of
                                               test-results/ before the next run wipes it)
 
 Each run is appended, not overwritten, so this file accumulates history across
@@ -34,8 +34,8 @@ from datetime import datetime, timezone, timedelta
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 JUNIT = os.path.join(ROOT, 'test-results', 'junit.xml')
 TEST_RESULTS_DIR = os.path.join(ROOT, 'test-results')
-OUT = os.path.join(ROOT, 'specs', 'run-history.json')
-ARTIFACTS_ROOT = os.path.join(ROOT, 'specs', 'run-history-artifacts')
+OUT = os.path.join(ROOT, 'reports', 'run-history.json')
+ARTIFACTS_ROOT = os.path.join(ROOT, 'reports', 'run-history-artifacts')
 RETENTION_DAYS = 45
 
 ATTACHMENT_TYPES = {
@@ -95,7 +95,7 @@ for testsuite in root.findall('.//testsuite'):
                 src = os.path.join(TEST_RESULTS_DIR, rel_path)
             if not os.path.exists(src):
                 continue
-            dest_rel = os.path.join('specs', 'run-history-artifacts', run_id, rel_path)
+            dest_rel = os.path.join('reports', 'run-history-artifacts', run_id, rel_path)
             dest_abs = os.path.join(ROOT, dest_rel)
             os.makedirs(os.path.dirname(dest_abs), exist_ok=True)
             shutil.copy2(src, dest_abs)
@@ -134,6 +134,9 @@ if total == 0:
 entry = {
     'run_id': run_id,
     'timestamp': timestamp,
+    # Which environment the run targeted, so staging and release runs stay distinguishable
+    # in the history and the report's trend.
+    'base_url': os.environ.get('TC_BASE_URL', 'https://test.registertovote.london'),
     'total': total,
     'passed': passed,
     'failed': failed,

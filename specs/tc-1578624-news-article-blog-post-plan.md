@@ -8,11 +8,11 @@ Seed: tests/seed.spec.ts
 Coverage summary:
 | TC ID | Title | Verdict | Existing spec | Notes |
 |-------|-------|---------|---------------|-------|
-| 1578624 | Verify successful creation of News article / Blog post with all required fields | Automate with setup | tests/smokeTest/verify-successful-creation-of-news-article-blog-post-with-all-required-fields.spec.js | Needs an authenticated admin/editor account; login currently fails intermittently (math-challenge answer-field detection issue in tests/helpers/authHelper.js) |
+| 1578624 | Verify successful creation of News article / Blog post with all required fields | Automate with setup | tests/cms/news-blog/verify-successful-creation-of-news-article-blog-post-with-all-required-fields.spec.js | Needs an authenticated admin/editor account; login currently fails intermittently (math-challenge answer-field detection issue in tests/helpers/authHelper.js) |
 
 Drift found:
 - **TC-1578624 steps 3 and 6** — the case embeds a literal password twice in its own step text. Hygiene issue: correct in TestCollab to reference credentials indirectly rather than in plain text.
-- **Existing spec hygiene issue** (predates this plan; not something this plan introduces) — `tests/smokeTest/verify-successful-creation-of-news-article-blog-post-with-all-required-fields.spec.js` hard-codes the username/password as local constants instead of reading them from environment variables. Per the standing "never put credentials in a plan" rule, this should be moved to `process.env.TC_USER` / `process.env.TC_PASS` (or equivalent) — flagged here for a human to fix in the spec, not silently changed by this plan.
+- **Existing spec hygiene issue** (predates this plan; not something this plan introduces) — `tests/cms/news-blog/verify-successful-creation-of-news-article-blog-post-with-all-required-fields.spec.js` hard-codes the username/password as local constants instead of reading them from environment variables. Per the standing "never put credentials in a plan" rule, this should be moved to `process.env.TC_USER` / `process.env.TC_PASS` (or equivalent) — flagged here for a human to fix in the spec, not silently changed by this plan.
 - **Step 4 → step 7 flow** — the case describes solving a math challenge mid-login (anti-bot check). This is the step most often responsible for automated failures: the answer-input field isn't reliably identifiable among the page's other input fields.
 
 ## Test Scenarios
@@ -23,7 +23,7 @@ Drift found:
 
 #### 1.1. Verify successful creation of News article / Blog post with all required fields
 
-**File:** `tests/smokeTest/verify-successful-creation-of-news-article-blog-post-with-all-required-fields.spec.js`
+**File:** `tests/cms/news-blog/verify-successful-creation-of-news-article-blog-post-with-all-required-fields.spec.js`
 
 **Preconditions:** Logged in as an editor/admin account with permission to create News article / Blog post content.
 

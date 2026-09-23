@@ -9,7 +9,7 @@
 
 | TC ID | Title | Verdict | Existing spec | Notes |
 |-------|-------|---------|---------------|-------|
-| 1578384 | Verify Header and Menu functionality (steps 1-3, 11) | Automate | `tests/smokeTest/verify-header-and-main-menu-appear.spec.js` (TC-1578342) covers 1-3 already | Reuses `navHelper.expectHeaderBanner`/`expectLogoNavigatesHome`; adds a new keyboard-focus check for step 11 |
+| 1578384 | Verify Header and Menu functionality (steps 1-3, 11) | Automate | `tests/site/navigation/verify-header-and-main-menu-appear.spec.js` (TC-1578342) covers 1-3 already | Reuses `navHelper.expectHeaderBanner`/`expectLogoNavigatesHome`; adds a new keyboard-focus check for step 11 |
 | 1578384 | Verify Header and Menu functionality (steps 4-10: menu CRUD via CMS) | **Blocked** | — | Reproducible page-self-close bug discovered live during validation — see Drift |
 
 ## Drift found
@@ -30,7 +30,7 @@
 
 #### 1.1. Verify Header and Menu functionality
 
-**File:** `tests/smokeTest/verify-header-and-menu-functionality.spec.js`
+**File:** `tests/site/navigation/verify-header-and-menu-functionality.spec.js`
 
 **Steps:**
 1. Navigate to the homepage, inspect the top banner via `navHelper.expectHeaderBanner`

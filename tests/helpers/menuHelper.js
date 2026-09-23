@@ -1,6 +1,7 @@
 const { expect } = require('@playwright/test');
+const { BASE_URL, url } = require('./siteConfig');
 
-const MENU_MANAGE_URL = 'https://test.registertovote.london/admin/structure/menu/manage/main';
+const MENU_MANAGE_URL = url('/admin/structure/menu/manage/main');
 const MENU_ADD_URL = `${MENU_MANAGE_URL}/add`;
 
 // Saving a menu add/edit/reorder/delete form intermittently closes the page a few
@@ -27,7 +28,7 @@ async function keepContextAlive(context) {
 }
 
 async function addMenuLink(page, context, { title, link, parentHref = null }) {
-  const url = parentHref ? `https://test.registertovote.london${parentHref}` : MENU_ADD_URL;
+  const url = parentHref ? `${BASE_URL}${parentHref}` : MENU_ADD_URL;
   await page.goto(url, { waitUntil: 'domcontentloaded' });
   await page.getByLabel('Menu link title').fill(title);
   await page.getByLabel('Link', { exact: true }).fill(link);
@@ -87,19 +88,19 @@ async function deleteMenuLink(page, context, title) {
 }
 
 async function expectVisibleInFENav(page, title) {
-  await page.goto('https://test.registertovote.london/', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/'), { waitUntil: 'domcontentloaded' });
   await expect(page.getByLabel('Main navigation').getByRole('link', { name: title, exact: true })).toBeVisible();
 }
 
 async function expectNotVisibleInFENav(page, title) {
-  await page.goto('https://test.registertovote.london/', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/'), { waitUntil: 'domcontentloaded' });
   await expect(page.getByLabel('Main navigation').getByRole('link', { name: title, exact: true })).toHaveCount(0);
 }
 
 // Child items only render once their parent is hovered (a hover-revealed dropdown,
 // confirmed live — not present in the flat nav list otherwise).
 async function expectChildVisibleOnHover(page, parentTitle, childTitle) {
-  await page.goto('https://test.registertovote.london/', { waitUntil: 'domcontentloaded' });
+  await page.goto(url('/'), { waitUntil: 'domcontentloaded' });
   const nav = page.getByLabel('Main navigation');
   await nav.getByRole('link', { name: parentTitle, exact: true }).hover();
   await expect(nav.getByRole('link', { name: childTitle, exact: true })).toBeVisible();

@@ -1,6 +1,7 @@
 const { expect } = require('@playwright/test');
+const { url } = require('./siteConfig');
 
-const HOME_URL = 'https://test.registertovote.london/';
+const HOME_URL = url('/');
 const STEP_NAMES = ['Step 1 Register', 'Step 2 Voter ID', 'Step 3 Vote'];
 
 // A snippet of each step's real content, used to confirm the accordion panel
