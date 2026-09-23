@@ -29,6 +29,5 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    # Customize this step as needed
-    - name: Build application
-      run: npx run build
+    # No build step: this repo is a test suite, not an application, so npm ci plus the
+    # browsers is the whole environment.

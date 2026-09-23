@@ -1,0 +1,49 @@
+# Promptfoo eval of the agent prompts in .github/agents/ — it grades the *agents*, not the
+# site, so it has nothing to do with the Playwright suite in playwright.yml.
+#
+# Every run costs API credits, so it deliberately does not fire on every push: only on
+# pushes to main, on pull requests that actually touch the eval config or an agent
+# definition, and on manual dispatch.
+name: Promptfoo Eval
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    paths:
+      - promptfooconfig.yaml
+      - .github/agents/**
+      - .github/workflows/eval.yml
+  workflow_dispatch:
+
+jobs:
+  eval:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # --grader is required: the config's provider is Anthropic, but promptfoo's
+      # model-graded assertions default to an OpenAI grader, so without it the job would
+      # need a second API key for a provider this project doesn't otherwise use.
+      # --no-cache keeps a green result from meaning "nothing was actually re-graded".
+      - name: Run promptfoo eval
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: >-
+          npx --yes promptfoo@latest eval
+          --no-cache
+          --grader anthropic:messages:claude-sonnet-5
+          --output eval-results.json
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: eval-results
+          path: eval-results.json
+          retention-days: 30

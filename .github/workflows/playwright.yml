@@ -16,9 +16,14 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
+    # Only the 'chromium' project runs here, which excludes AUTH_SPECS (see
+    # playwright.config.js). Those ~40 specs need TC_ADMIN_SESSION, a logged-in cookie CI
+    # does not have and should not mint: the staging admin account allows one session at a
+    # time, so signing in from CI would evict whoever is working in the CMS. They run
+    # locally via `npm test`, which covers chromium plus content-admin.
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --project=chromium
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
