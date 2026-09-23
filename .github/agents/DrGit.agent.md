@@ -64,8 +64,8 @@ Never commit, and warn the user if asked to:
 | Never | Why / where it lives |
 |---|---|
 | `.env`, `.env.*`, `.mcp.json` | Secrets — `TC_ADMIN_USER`/`TC_ADMIN_PASS`, `TC_ADMIN_SESSION` (a live Drupal session cookie), TestCollab and Jira tokens, `ANTHROPIC_API_KEY`. Already in `.gitignore` |
-| Anything containing a literal password, token, session cookie or the admin username | Caught by `tools/check_secrets.py`, and also by `tests/smokeTest/no-hardcoded-credentials.spec.js` and the Promptfoo assertion — but the scanner is the gate |
-| `test-results/`, `playwright-report/`, `specs/run-history-artifacts/`, `test-report.html`, `broken-links-report.json`, `.playwright-mcp/`, root-level `*.png` | Regenerable run output, videos, traces and screenshots. `specs/run-history.json` **is** tracked (metadata only) |
+| Anything containing a literal password, token, session cookie or the admin username | Caught by `tools/check_secrets.py`, and also by `tests/guards/no-hardcoded-credentials.spec.js` and the Promptfoo assertion — but the scanner is the gate |
+| `test-results/`, `playwright-report/`, `reports/run-history-artifacts/`, `reports/test-report.html`, `reports/broken-links-report.json`, `.playwright-mcp/`, root-level `*.png` | Regenerable run output, videos, traces and screenshots. `reports/run-history.json` and `reports/burndown-*` **are** tracked (metadata only) |
 | `node_modules/` | Dependencies |
 
 Before every commit:
@@ -109,11 +109,11 @@ One giant commit hides what changed and makes a revert impossible. Split the wor
 
 | Commit | Contains |
 |---|---|
-| A test batch | The plan (`specs/tc-*-plan.md`), the new/changed helpers in `tests/helpers/`, the specs in `tests/smokeTest/`, and the matching `AUTH_SPECS` entries in `playwright.config.js` — so any commit of the batch runs on its own |
+| A test batch | The plan (`specs/tc-*-plan.md`), the new/changed helpers in `tests/helpers/`, the specs in their `tests/<area>/` folder, and the matching `AUTH_SPECS` entries in `playwright.config.js` — so any commit of the batch runs on its own |
 | A helper or config fix | e.g. `tools/run-tests.sh`, `playwright.config.js` on its own, `contentPageHelper.js` hardening |
 | Agent definitions | Files under `.github/agents/` |
 | Docs | `README.md` |
-| Run history | `specs/run-history.json` |
+| Run history | `reports/run-history.json` |
 
 If a change straddles two concerns, ask rather than guess.
 

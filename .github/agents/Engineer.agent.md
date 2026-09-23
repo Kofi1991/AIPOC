@@ -54,7 +54,7 @@ mcp-servers:
 | **Triggered by** | A plan `playwright-testcollab-qa` has marked **Approved** |
 | **Model** | Claude Sonnet 4.6 |
 | **Reads from** | The plan + TestCollab (re-checked fresh) + the live site |
-| **Writes** | `tests/<slugified-test-title>.spec.js` only — no TestCollab access at all; [`QA`](QA.agent.md) tags the case once this agent reports a pass |
+| **Writes** | `tests/<area>/.../<slugified-test-title>.spec.js` only — no TestCollab access at all; [`QA`](QA.agent.md) tags the case once this agent reports a pass |
 
 **Contents:** [What this is](#what-this-is) · [How a generation run actually goes](#how-a-generation-run-actually-goes) · [Out of scope by standing instruction](#out-of-scope-by-standing-instruction) · [Code style](#code-style--reusable-minimal) · [Authenticated flows](#authenticated-flows--the-session-workaround) · [Output](#output)
 
@@ -133,13 +133,29 @@ For each scenario that passed the guard above:
    description is the intent behind each tool call, not just a comment to transcribe.
 3. Pull the generator log via `generator_read_log`.
 4. Write the file immediately after, via `generator_write_test`:
-   - **Path:** `tests/<slugified-test-title>.spec.js` — named after the test title, not
-     the TC ID (e.g. TC-1578342 "Verify Header and Main Menu Appear" becomes
-     `tests/verify-header-and-main-menu-appear.spec.js`). Lowercase, hyphenated,
-     alphanumeric only.
+   - **Path:** `tests/<area>/<slugified-test-title>.spec.js` — named after the test title,
+     not the TC ID (e.g. TC-1578342 "Verify Header and Main Menu Appear" becomes
+     `tests/site/navigation/verify-header-and-main-menu-appear.spec.js`). Lowercase,
+     hyphenated, alphanumeric only. Pick the folder by what the test covers, not by suite:
+     `tests/auth/` (login, logout, password reset), `tests/site/<navigation|pages|search>/`
+     (public pages, no login), `tests/cms/<content-type>/` (logged-in content work: one
+     folder per type, e.g. `homepage/`, `resource/`, `news-blog/`). Import helpers with the
+     right depth (`../helpers/...` from `tests/auth/`, `../../helpers/...` from the deeper
+     folders). A spec that needs a login also goes in `AUTH_SPECS` in
+     `playwright.config.js`.
    - A `describe` block matching the plan's top-level suite name.
    - The test title is the exact TestCollab case title, unprefixed — no `TC-<id>:` stuck
      on the front of it.
+   - A suite tag, so the test runs under `npm run test:smoke` / `test:regression`. If the
+     file's `describe` block wraps exactly one test, put it there —
+     `test.describe('<suite>', { tag: ['@smoke', '@regression'] }, () => { test('<title>', async ({ page }) => { ... }); })`
+     — so it reads at the top of the file. Otherwise (no `describe`, or more than one test
+     inside it) put it on `test(...)` itself, right after the title:
+     `test('<title>', { tag: ['@smoke', '@regression'] }, async ({ page }) => { ... })`.
+     Suites are tags, not folders, and a test can be in both. Default to both tags; use
+     `['@regression']` alone only when the plan says the test is deeper or slower coverage
+     that doesn't belong in the smoke pass. Never leave a test untagged — it would run in
+     neither `npm run test:smoke` nor `npm run test:regression`.
    - A header comment at the top of the file carrying the traceability the filename no
      longer does: `// spec: specs/tc-<id>-<slug>-plan.md`. This is the only place the
      numeric ID appears in the spec, so it's never left out.

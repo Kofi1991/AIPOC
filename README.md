@@ -33,15 +33,42 @@ JIRA_PROJECT_KEY=
 
 ```bash
 npm test                # run everything
-npm run test:report     # run, then regenerate and open test-report.html
+npm run test:smoke      # only the tests tagged @smoke
+npm run test:regression # only the tests tagged @regression
+npm run test:report     # run, then regenerate and open reports/test-report.html
 npm run test:jira       # run, then file Jira bugs for failures that still reproduce
 npm run test:full       # both of the above
 
-npx playwright test tests/smokeTest         # just the smoke suite
+npx playwright test --grep @smoke           # the same suite, straight through Playwright
 npx playwright test --project=chromium      # a single browser
 ```
 
-`npm test` (via `tools/run-tests.sh`) always records the run to `specs/run-history.json`,
+### Smoke and regression suites
+
+A suite is a **tag on the test**, not a folder. Every test carries `{ tag: [...] }` after its
+title, and a test can belong to both:
+
+```js
+test.describe('Header and Menu Functionality', { tag: ['@smoke', '@regression'] }, () => {
+  test('Verify header and menu functionality', async ({ page }) => { ... });
+});
+```
+
+When a file's `describe` block wraps more than one test, or there's no `describe` at all, the
+tag goes on `test(...)` itself instead, right after the title.
+
+| Tags | Meaning |
+|---|---|
+| `@smoke` `@regression` | Fast, critical path — runs in both suites (every test today) |
+| `@regression` only | Deeper or slower coverage that doesn't need to run on every smoke pass |
+| `@smoke` only | Rare — a smoke check that isn't worth keeping in the full regression run |
+
+`npm run test:smoke` and `npm run test:regression` (or `--smoke` / `--regression` on
+`tools/run-tests.sh`, combinable) select by tag. All existing tests start as both; to move a
+test out of the smoke suite, delete `'@smoke'` from its tag list. The suite a test is in never depends
+on its folder.
+
+`npm test` (via `tools/run-tests.sh`) always records the run to `reports/run-history.json`,
 even on failure, and exits with the tests' own exit code. It runs on **Chromium only** by
 default (plus the Chromium-only `content-admin` login specs); pass `--all-browsers` for
 chromium + firefox + webkit, or `--project=<name>` to choose. It also defaults to `--workers=1`, because the login specs share one admin account; pass `--workers=N` to override.
@@ -69,27 +96,41 @@ can expire even within the same day.)
 
 ```
 tests/
-  smokeTest/          spec files — one per TestCollab case, named after the case title
+  auth/               login, logout, password-reset specs
+  site/               public-site specs (no login): navigation/, pages/, search/
+  cms/                logged-in content specs (the `content-admin` project), one folder per
+                      content type: generic-page/ homepage/ landing-page/ resource/ news-blog/
+  guards/             repo checks, e.g. no hard-coded credentials
   helpers/            reusable page-interaction helpers, shared across specs
+  fixtures/           files the specs upload
+  seed.spec.ts        the seed the planner/generator agents start from
 specs/
   tc-<id>-*-plan.md   generated automation plans, one per TestCollab case (or group)
-  run-history.json    every run's pass/fail counts, feeds the report and burndown chart
+reports/
+  run-history.json    every run's pass/fail counts (tracked; feeds the report and burndown)
+  burndown-data.json  automated-vs-remaining history; burndown-chart.html is built from it
+  test-report.html, broken-links-report.json, run-history-artifacts/   generated, not tracked
 tools/
   run-tests.sh        the test runner wrapper (see npm scripts above)
-  generate_report.py  builds test-report.html from the latest JUnit run + run-history.json
-  render_burndown.py  builds specs/burndown-chart.html (automated vs. remaining over time)
+  generate_report.py  builds reports/test-report.html from the latest JUnit run + run history
+  render_burndown.py  builds reports/burndown-chart.html (automated vs. remaining over time)
   record_run_history.py
   file_jira_bugs.py   opt-in: files a Jira bug per still-reproducing failure
   refresh-session.js  logs in once and saves the session cookie to .env (`npm run session`)
   check-broken-links.js
+  check_secrets.py, scrub_secrets.py, install-git-hooks.sh   keep secrets out of commits
 .github/agents/       Claude agent definitions — see "Agent design" below
 ```
 
+Which folder a spec goes in is about what it tests, not which suite it belongs to — suites
+are tags (see "Smoke and regression suites"). A spec that needs a logged-in admin goes under
+`tests/cms/` and must be listed in `AUTH_SPECS` in `playwright.config.js`.
+
 ## Reports
 
-- `test-report.html` — latest run, pass/fail breakdown, and a "Past runs" trend tab.
+- `reports/test-report.html` — latest run, pass/fail breakdown, and a "Past runs" trend tab.
   Regenerate with `npm run test:report` or `python3 tools/generate_report.py`.
-- `specs/burndown-chart.html` — TestCollab cases automated vs. remaining, over time.
+- `reports/burndown-chart.html` — TestCollab cases automated vs. remaining, over time.
   Regenerate with `python3 tools/render_burndown.py`.
 - `playwright-report/` — Playwright's own built-in HTML reporter for the most recent run.
 
