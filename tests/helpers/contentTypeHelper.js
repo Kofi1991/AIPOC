@@ -1,8 +1,9 @@
 const { expect } = require('@playwright/test');
 const { dismissAutosaveDialog } = require('./authHelper');
 const { setRichTextBody, filterContentListByTitle, deleteContentItemFromList } = require('./contentPageHelper');
+const { BASE_URL, url } = require('./siteConfig');
 
-const SITE = 'https://test.registertovote.london';
+const SITE = BASE_URL;
 
 const ADD_PATHS = {
   homepage: '/node/add/homepage',
@@ -61,14 +62,73 @@ async function typeTitleFormattedAsHeading(page, text, headingLabel = 'Heading 1
   await page.getByRole('menuitemradio', { name: headingLabel }).click();
 }
 
+// Counts the paragraph rows currently in Content Sections. Each added component becomes one
+// draggable row, whatever its type.
+function paragraphRows(page) {
+  return page.locator('table[id*="content-sections"] tr.draggable');
+}
+
+// Opens the Content Sections "Add Paragraph" picker and selects a component by name.
+// The picker renders two nested dialogs sharing the "Add Paragraph" name, hence .last().
+// The subform arrives over AJAX, so this waits for a new paragraph row to land. (Waiting on
+// the CKEditor count instead would hang for components that have no rich text field at all,
+// e.g. "Documents", which is only a media picker.)
+async function addParagraph(page, type) {
+  const before = await paragraphRows(page).count();
+  await page.getByRole('button', { name: 'Add Paragraph' }).click();
+  await page
+    .getByRole('dialog', { name: 'Add Paragraph' })
+    .last()
+    .getByRole('button', { name: type, exact: true })
+    .click();
+  await expect(paragraphRows(page)).toHaveCount(before + 1, { timeout: 20000 });
+}
+
+// Sets a CKEditor field by its Drupal field name (e.g. 'field_accordion_items'), rather than
+// by "the newest instance" — a form can hold several editors (the node Body, a paragraph's
+// description, a nested item's description) and position is not a reliable way to tell them apart.
+async function setEditorByFieldName(page, fieldNameFragment, html) {
+  await page.evaluate(
+    ({ fragment, value }) => {
+      const match = Array.from(window.Drupal.CKEditor5Instances.values()).find((instance) =>
+        (instance.sourceElement?.name || '').includes(fragment)
+      );
+      if (!match) throw new Error(`No CKEditor field matching "${fragment}"`);
+      match.setData(value);
+    },
+    { fragment: fieldNameFragment, value: html }
+  );
+}
+
+// Fills the node's own Title. Like the CTA above, this is targeted by field name: paragraph
+// subforms (an accordion item, for instance) have their own required "Title *" field, so the
+// role-based locator stops being unique as soon as one is added.
+async function fillNodeTitle(page, title) {
+  await page.locator('input[name="title[0][value]"]').fill(title);
+}
+
+// Fills the node's own CTA field (Landing page). Targeted by field name rather than by role:
+// several paragraph components carry their own "CTA" group, so once one has been added
+// getByRole('group', { name: 'CTA' }) matches more than one and the role-based locator is
+// ambiguous. `field_cta[0]` is unambiguously the node-level field.
+async function fillCta(page, { url: href, linkText }) {
+  await page.locator('input[name="field_cta[0][uri]"]').fill(href);
+  await page.locator('input[name="field_cta[0][title]"]').fill(linkText);
+}
+
+// Adds a "Documents" paragraph and attaches a file from the media library. The component has
+// no required fields and no rich text — just the "Media upload" picker.
+async function addDocumentsParagraph(page) {
+  await addParagraph(page, 'Documents');
+  await pickMediaForField(page, 'Media upload');
+}
+
 // Adds a "Text" paragraph (offered on every content type's Content Sections, unlike the
 // type-specific ones) and fills its rich text editor. The newest CKEditor instance is the
 // one just added, so set that one rather than the page's Body editor.
 async function addTextParagraph(page, html) {
-  const before = await page.evaluate(() => window.Drupal.CKEditor5Instances.size);
-  await page.getByRole('button', { name: 'Add Paragraph' }).click();
-  await page.getByRole('dialog').getByRole('button', { name: 'Text', exact: true }).click();
-  await page.waitForFunction((n) => window.Drupal.CKEditor5Instances.size > n, before);
+  await addParagraph(page, 'Text');
+  await page.waitForFunction(() => window.Drupal.CKEditor5Instances.size > 0);
   await page.evaluate((h) => {
     const instances = Array.from(window.Drupal.CKEditor5Instances.values());
     instances[instances.length - 1].setData(h);
@@ -141,6 +201,11 @@ module.exports = {
   saveAndWaitForNodePage,
   createHomepage,
   typeTitleFormattedAsHeading,
+  addParagraph,
+  fillCta,
+  fillNodeTitle,
+  setEditorByFieldName,
+  addDocumentsParagraph,
   addTextParagraph,
   createLandingPage,
   createResource,
