@@ -2,6 +2,8 @@
 # Secrets
 .env
 .env.*
+# ...except the template, which is names and comments only and is meant to be tracked
+!.env.example
 .mcp.json
 
 # Playwright
@@ -25,3 +27,9 @@ node_modules/
 
 # Stray root-level debug screenshots
 /*.png
+
+# One-off scratch output (link audits, experiment artifacts) — not source
+/scratchpad/
+
+# Python bytecode from tools/
+__pycache__/

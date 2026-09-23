@@ -18,6 +18,10 @@ import sys
 
 ROOT = subprocess.run(['git', 'rev-parse', '--show-toplevel'], capture_output=True, text=True).stdout.strip() or '.'
 
+# Tracked on purpose despite matching a blocked pattern below: the .env template carries
+# variable names and comments only, never values.
+ALLOWED_PATHS = {'.env.example'}
+
 # Paths that must never be committed, whatever they contain.
 BLOCKED_PATHS = [
     (r'(^|/)\.env($|\.)', 'environment file'),
@@ -119,6 +123,8 @@ def main():
     blocks, warns = [], []
 
     for path in sorted(p for p in changed_paths(mode) if p):
+        if os.path.basename(path) in ALLOWED_PATHS:
+            continue
         for rx, why in BLOCKED_PATHS:
             if re.search(rx, path):
                 blocks.append((path, 0, f'{why} — this path must never be committed'))
