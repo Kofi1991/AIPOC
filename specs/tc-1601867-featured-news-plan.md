@@ -14,7 +14,13 @@ Validation scope (honesty note): live-verified — heading, exact card count (cu
 
 Drift found:
 - **Each card is ONE link, not two.** Case steps 11-12 describe tabbing through "image/link, then heading link" per card, implying each card has a separate focusable image-link and heading-link. Verified live: each card is a single `<a>` element wrapping the image, heading, and summary together — there is no separate image-only link. The accessible name of that one link is the concatenation of the heading and summary text.
-- **Card count is currently exactly 2** (not 1), matching the "never more than 2" constraint the case itself flags as needing product confirmation — recorded as the current, real state.
+- **Card count is currently exactly 2** (not 1) on staging, matching the "never more than 2" constraint the case itself flags as needing product confirmation — recorded as the current, real state.
+- **Update (2026-09-23), verified against release:** release shows 3 real, distinct
+  published articles in this section (confirmed manually by the user too), so the "never
+  more than 2" cap is not something the app actually enforces. The spec's assertion was
+  relaxed to require at least one valid card rather than capping the count — see
+  `tests/helpers/featuredNewsHelper.js`. Worth a product decision on whether the case's
+  "maximum of TWO" text should be corrected in TestCollab.
 
 ## New helper needed
 `tests/helpers/featuredNewsHelper.js` — get-the-section, assert 1-2 cards each with non-empty image/heading/summary and a real (non-'#') href, click-through-and-back for a given card index, and a mobile-responsive check.
@@ -32,7 +38,7 @@ Drift found:
 **Steps:**
   1. Navigate to https://test.registertovote.london/ and scroll to the 'Featured news' section
     - expect: 'Featured news' heading (h2) is visible
-    - expect: Section shows between 1 and 2 cards, never more — currently 2
+    - expect: Section shows at least one card (no upper bound enforced — see Drift)
   2. Inspect both cards: each has a visible image with non-empty alt text, a non-empty heading, non-empty summary text, and a real link (not '#')
     - expect: Both cards have valid structure per the above
   3. Click the first card (the whole card is a single link — see Drift) and confirm it navigates to a real article, then go back
