@@ -36,4 +36,8 @@ function url(path = '/') {
   return `${BASE_URL}/${String(path).replace(/^\/+/, '')}`;
 }
 
-module.exports = { BASE_URL, DEFAULT_BASE_URL, url };
+// For page.context().addCookies(): the leading dot makes it match the host regardless of a
+// www/subdomain split, the way Drupal itself scopes its session cookie.
+const COOKIE_DOMAIN = `.${host}`;
+
+module.exports = { BASE_URL, DEFAULT_BASE_URL, HOST: host, COOKIE_DOMAIN, url };

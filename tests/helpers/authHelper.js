@@ -1,5 +1,5 @@
 const { expect } = require('@playwright/test');
-const { BASE_URL, url } = require('./siteConfig');
+const { BASE_URL, COOKIE_DOMAIN, url } = require('./siteConfig');
 
 // Ensure cookies are accepted before any authenticated flow.
 //   1. Pre-seed the Civic Cookie Control consent cookie so the site treats consent as
@@ -17,13 +17,13 @@ async function acceptCookies(page) {
     interactedWith: true,
   });
   await page.context().addCookies([
-    { name: 'CookieControl', value: consent, domain: '.test.registertovote.london', path: '/' },
+    { name: 'CookieControl', value: consent, domain: COOKIE_DOMAIN, path: '/' },
   ]);
 
   await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
 
   const cookies = await page.context().cookies(BASE_URL);
-  expect(cookies.length, 'Browser accepted no cookies from test.registertovote.london').toBeGreaterThan(0);
+  expect(cookies.length, `Browser accepted no cookies from ${COOKIE_DOMAIN}`).toBeGreaterThan(0);
 }
 
 // True when a pre-existing Drupal session is supplied via TC_ADMIN_SESSION. In that
@@ -42,7 +42,7 @@ async function useExistingSession(page) {
   const name = process.env.TC_ADMIN_SESSION.slice(0, eq).trim();
   const value = process.env.TC_ADMIN_SESSION.slice(eq + 1).trim();
   await page.context().addCookies([
-    { name, value, domain: '.test.registertovote.london', path: '/', httpOnly: true, secure: true, sameSite: 'Lax' },
+    { name, value, domain: COOKIE_DOMAIN, path: '/', httpOnly: true, secure: true, sameSite: 'Lax' },
   ]);
 
   await page.goto(`${BASE_URL}/user`, { waitUntil: 'domcontentloaded' });
