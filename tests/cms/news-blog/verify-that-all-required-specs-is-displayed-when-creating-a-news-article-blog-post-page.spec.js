@@ -12,7 +12,7 @@ test.describe('News Article / Blog Post Required Fields', { tag: ['@regression']
     await logout(page);
   });
 
-  test('Verify That All Required Specs Is Displayed When Creating A News Article/ Blog Post Page', async ({ page }) => {
+  test('Verify That All Required Specs Is Displayed When Creating A News Article / Blog Post Page', async ({ page }) => {
     test.setTimeout(120_000); // includes the media-library modal
 
     // GIVEN the User is logged in as an Admin

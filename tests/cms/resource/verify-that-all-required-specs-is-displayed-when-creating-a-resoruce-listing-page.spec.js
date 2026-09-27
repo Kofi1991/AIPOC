@@ -20,7 +20,7 @@ test.describe('Resource Required Fields', { tag: ['@regression'] }, () => {
     await logout(page);
   });
 
-  test('Verify That All Required Specs Is Displayed When Creating A Resoruce Listing Page', async ({ page }) => {
+  test('Verify That All Required Specs Is Displayed When Creating A Resource Listing Page', async ({ page }) => {
     test.setTimeout(120_000);
 
     // GIVEN the User is logged in as an Admin

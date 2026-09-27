@@ -14,7 +14,7 @@ test.describe('News Article / Blog Post Creation', { tag: ['@regression'] }, () 
     await logout(page);
   });
 
-  test('Verify That Users Are Able To Create  News Article/ Blog Post Content Page', async ({ page }) => {
+  test('Verify That Users Are Able To Create News Article / Blog Post Content Page', async ({ page }) => {
     test.setTimeout(120_000);
 
     // GIVEN a user is logged in as an Admin

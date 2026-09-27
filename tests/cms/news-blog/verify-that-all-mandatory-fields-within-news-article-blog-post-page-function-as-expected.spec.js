@@ -12,7 +12,7 @@ test.describe('News Article / Blog Post Validation', { tag: ['@regression'] }, (
     await logout(page);
   });
 
-  test('Verify That All Mandatory Fields Within News Article/ Blog Post Page Function as Expected', async ({ page }) => {
+  test('Verify That All Mandatory Fields Within News Article / Blog Post Page Function as Expected', async ({ page }) => {
     // GIVEN the User is logged in as an Admin
     await login(page, process.env.TC_ADMIN_USER, process.env.TC_ADMIN_PASS);
 

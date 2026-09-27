@@ -17,7 +17,7 @@ test.describe('News Article / Blog Post Deletion', { tag: ['@regression'] }, () 
     await logout(page);
   });
 
-  test('Verify User Is Able To Delete News Article/ Blog Post Page', async ({ page }) => {
+  test('Verify User Is Able To Delete News Article / Blog Post Page', async ({ page }) => {
     test.setTimeout(120_000);
 
     // GIVEN the User is logged in as an Admin

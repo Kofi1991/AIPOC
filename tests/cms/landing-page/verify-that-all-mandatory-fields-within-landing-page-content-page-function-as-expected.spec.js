@@ -20,7 +20,7 @@ test.describe('Landing Page Validation', { tag: ['@regression'] }, () => {
     await logout(page);
   });
 
-  test('Verify That All Mandatory Fields Within Landing Page  Content Page Function as Expected', async ({ page }) => {
+  test('Verify That All Mandatory Fields Within Landing Page Content Page Function as Expected', async ({ page }) => {
     test.setTimeout(120_000);
 
     // GIVEN the User is logged in as an Admin

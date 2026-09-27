@@ -17,7 +17,7 @@ test.describe('News Article / Blog Post Editing', { tag: ['@regression'] }, () =
     await logout(page);
   });
 
-  test('Verify Users Are Able to Edit Newly Created News Article/ Blog Post Content Page', async ({ page }) => {
+  test('Verify Users Are Able to Edit Newly Created News Article / Blog Post Content Page', async ({ page }) => {
     test.setTimeout(120_000);
 
     // GIVEN the User is logged in as an Admin
