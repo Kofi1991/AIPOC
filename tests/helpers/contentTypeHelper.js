@@ -9,6 +9,7 @@ const ADD_PATHS = {
   homepage: '/node/add/homepage',
   landing: '/node/add/landing_page',
   resource: '/node/add/resource',
+  resourceCollection: '/node/add/resource_collection',
 };
 
 // Opens the create form for a content type straight from its /node/add/<type> URL.
@@ -21,8 +22,10 @@ async function openContentForm(page, type) {
 // Fills a media-library field ("Add media" > pick the first library item > Insert selected).
 // Waits for the field to report the selection before returning, because Drupal inserts the
 // choice via AJAX and saving straight away submits the form before the field is filled.
-async function pickMediaForField(page, groupName) {
-  const group = page.getByRole('group', { name: groupName });
+// `scope` narrows the group lookup to a specific paragraph row rather than the whole page —
+// needed once more than one paragraph is on the form, since group names aren't unique then.
+async function pickMediaForField(page, groupName, scope = page) {
+  const group = scope.getByRole('group', { name: groupName });
   await group.getByRole('button', { name: 'Add media' }).click();
   const dialog = page.getByRole('dialog');
   const firstItem = dialog.getByRole('checkbox', { name: /^Select / }).first();
@@ -63,9 +66,11 @@ async function typeTitleFormattedAsHeading(page, text, headingLabel = 'Heading 1
 }
 
 // Counts the paragraph rows currently in Content Sections. Each added component becomes one
-// draggable row, whatever its type.
+// draggable row, whatever its type. Scoped to DIRECT child rows of the outer table specifically
+// — some components (Accordion items, Multi-card cards) have their own nested reorderable
+// table one level down, and a plain descendant selector would double-count those too.
 function paragraphRows(page) {
-  return page.locator('table[id*="content-sections"] tr.draggable');
+  return page.locator('table[id^="field-content-sections-values"] > tbody > tr.draggable');
 }
 
 // Opens the Content Sections "Add Paragraph" picker and selects a component by name.
@@ -120,7 +125,136 @@ async function fillCta(page, { url: href, linkText }) {
 // no required fields and no rich text — just the "Media upload" picker.
 async function addDocumentsParagraph(page) {
   await addParagraph(page, 'Documents');
-  await pickMediaForField(page, 'Media upload');
+  await pickMediaForField(page, 'Media upload', paragraphRows(page).last());
+}
+
+// Adds an "Accordion" paragraph and fills it. Only the accordion item's Title is required;
+// the accordion's own heading and the item's description are optional. On the front end the
+// item Title renders as a collapsed toggle button and the item description is its panel.
+async function addAccordionParagraph(page, { heading, itemTitle, itemBody }) {
+  await addParagraph(page, 'Accordion');
+  // Captured immediately, so it's unambiguously *this* row even if more paragraphs are added
+  // after it. Both the outer paragraph's own Title and the nested item's Title share the
+  // "][field_title]" name fragment and the plain "Title" accessible name, so the outer one is
+  // matched by excluding the nested item's distinguishing "accordion_items" fragment.
+  const row = paragraphRows(page).last();
+  if (heading) {
+    await row.locator('input[name*="][field_title]"]:not([name*="accordion_items"])').fill(heading);
+  }
+  await row.locator('input[required][name*="field_accordion_items"][name*="field_title"]').fill(itemTitle);
+  if (itemBody) {
+    await setEditorByFieldName(page, 'field_accordion_items', `<p>${itemBody}</p>`);
+  }
+}
+
+// Adds an "Image / video" paragraph: only the Media field is required.
+async function addImageVideoParagraph(page, { title } = {}) {
+  await addParagraph(page, 'Image / video');
+  const row = paragraphRows(page).last();
+  if (title) {
+    await row.getByRole('textbox', { name: 'Title', exact: true }).fill(title);
+  }
+  await pickMediaForField(page, 'Media *', row);
+}
+
+// Adds a "Call to action" paragraph. The only required field is Colour theme, a radio group
+// that already defaults to "Light" — nothing to fill unless a real CTA link is wanted too.
+async function addCallToActionParagraph(page, { title, ctaUrl, ctaLinkText } = {}) {
+  await addParagraph(page, 'Call to action');
+  const row = paragraphRows(page).last();
+  if (title) await row.getByRole('textbox', { name: 'Title', exact: true }).fill(title);
+  if (ctaUrl) {
+    const cta = row.getByRole('group', { name: 'CTA' });
+    await cta.getByRole('textbox', { name: 'URL', exact: true }).fill(ctaUrl);
+    await cta.getByRole('textbox', { name: 'Link text', exact: true }).fill(ctaLinkText || 'Learn more');
+  }
+}
+
+// Adds a "Partners / logo listing paragraph" and attaches one logo from the media library —
+// the only required field.
+async function addPartnersLogoParagraph(page, { title } = {}) {
+  await addParagraph(page, 'Partners / logo listing paragraph');
+  const row = paragraphRows(page).last();
+  if (title) {
+    await row.getByRole('textbox', { name: 'Title', exact: true }).fill(title);
+  }
+  await pickMediaForField(page, 'Partner / logo cards *', row);
+}
+
+// Adds an "Embed" paragraph and fills its required "Embed" field with a code snippet — the
+// case itself supplies a YouTube iframe embed to use here.
+async function addEmbedParagraph(page, embedHtml) {
+  await addParagraph(page, 'Embed');
+  await paragraphRows(page).last().getByRole('textbox', { name: /^Embed/ }).fill(embedHtml);
+}
+
+// Adds a "Dual column block" paragraph. Background colour is the only required field, and it
+// already defaults to "Light" — the two columns themselves are optional (each is its own
+// nested "Add Image / video" etc. picker), so this leaves them empty.
+async function addDualColumnParagraph(page, { title } = {}) {
+  await addParagraph(page, 'Dual column block');
+  if (title) {
+    await paragraphRows(page).last().getByRole('textbox', { name: 'Title', exact: true }).fill(title);
+  }
+}
+
+// Adds a "Multi-card block" paragraph. Drupal enforces "A minimum of 2 Paragraphs of type Card
+// is allowed", so `cards` must have at least 2 entries — one Card ships by default, the rest
+// are added via the row's own "Add Card" button. Each card's Image, Title and URL are required.
+async function addMultiCardParagraph(page, cards) {
+  await addParagraph(page, 'Multi-card block');
+  const row = paragraphRows(page).last();
+  const cardRows = row.locator('table[id^="field-card-block-values"] > tbody > tr.draggable');
+  for (let i = 1; i < cards.length; i += 1) {
+    await row.getByRole('button', { name: 'Add Card' }).click();
+    await expect(cardRows).toHaveCount(i + 1, { timeout: 20000 });
+  }
+  for (let i = 0; i < cards.length; i += 1) {
+    const cardRow = cardRows.nth(i);
+    await pickMediaForField(page, 'Image *', cardRow);
+    await cardRow.getByRole('textbox', { name: 'Title *', exact: true }).fill(cards[i].cardTitle);
+    await cardRow.getByRole('textbox', { name: 'URL *', exact: true }).fill(cards[i].cardUrl);
+  }
+}
+
+// Adds a "Chatbot CTA" paragraph. Title, Sub-title, Summary, the Chatbot link's URL and Link
+// text, and CTA Text are all required.
+async function addChatbotCtaParagraph(page, { title, subTitle, summary, linkUrl, linkText, ctaText }) {
+  await addParagraph(page, 'Chatbot CTA');
+  const row = paragraphRows(page).last();
+  await row.getByRole('textbox', { name: 'Title *', exact: true }).fill(title);
+  await row.getByRole('textbox', { name: 'Sub-title *', exact: true }).fill(subTitle);
+  await row.getByRole('textbox', { name: 'Summary *', exact: true }).fill(summary);
+  const chatbotLink = row.getByRole('group', { name: 'Chatbot link *' });
+  await chatbotLink.getByRole('textbox', { name: 'URL *', exact: true }).fill(linkUrl);
+  await chatbotLink.getByRole('textbox', { name: 'Link text *', exact: true }).fill(linkText);
+  await row.getByRole('textbox', { name: 'CTA Text *', exact: true }).fill(ctaText);
+}
+
+// Adds a "Newsletter signup" paragraph. The required reference field already defaults to the
+// "Newsletter signup" webform (the other option is "Contact"), so nothing to pick unless a
+// different one is wanted.
+async function addNewsletterSignupParagraph(page, { title } = {}) {
+  await addParagraph(page, 'Newsletter signup');
+  if (title) {
+    await paragraphRows(page).last().getByRole('textbox', { name: 'Title', exact: true }).fill(title);
+  }
+}
+
+// Adds a "Resources menu" paragraph with one card. Title and Link are required; Image and
+// Summary are optional.
+async function addResourcesMenuParagraph(page, { cardTitle, cardLink }) {
+  await addParagraph(page, 'Resources menu');
+  const row = paragraphRows(page).last();
+  await row.getByRole('textbox', { name: 'Title *', exact: true }).fill(cardTitle);
+  await row.getByRole('textbox', { name: 'Link *', exact: true }).fill(cardLink);
+}
+
+// Adds a "Webform" paragraph. The Webform reference defaults to "- Select -" (blank), so a
+// real webform must be chosen — "Contact" is one of the two available on this site.
+async function addWebformParagraph(page, { webformLabel = 'Contact' } = {}) {
+  await addParagraph(page, 'Webform');
+  await paragraphRows(page).last().getByRole('combobox', { name: 'Webform *' }).selectOption({ label: webformLabel });
 }
 
 // Adds a "Text" paragraph (offered on every content type's Content Sections, unlike the
@@ -146,6 +280,26 @@ async function createResource(page, { title, summary }) {
   await page.getByRole('textbox', { name: 'Title *' }).fill(title);
   if (summary) await page.getByRole('textbox', { name: 'Summary' }).fill(summary);
   await pickMediaForField(page, 'Resource download *');
+  await saveAndWaitForNodePage(page);
+}
+
+// The "Resources" field on a Resource Collection is an entity-reference autocomplete: type
+// enough of an existing Resource's title to bring up the suggestion list, then click the
+// match. There must already be a saved Resource with this title for a suggestion to appear.
+async function fillResourceReference(page, resourceTitle) {
+  const field = page.getByRole('textbox', { name: /^Resources \(value 1\)/ });
+  await field.click();
+  await field.pressSequentially(resourceTitle.slice(0, 40), { delay: 20 });
+  const suggestion = page.locator('.ui-autocomplete li a, li.ui-menu-item, [role="option"]').first();
+  await suggestion.waitFor({ timeout: 10000 });
+  await suggestion.click();
+}
+
+// Resource Collection: Title and one Resources reference are required; everything else is
+// optional. `resourceTitle` must be an already-saved Resource node's title.
+async function createResourceCollection(page, { title, resourceTitle }) {
+  await page.getByRole('textbox', { name: 'Title *' }).fill(title);
+  await fillResourceReference(page, resourceTitle);
   await saveAndWaitForNodePage(page);
 }
 
@@ -202,12 +356,26 @@ module.exports = {
   createHomepage,
   typeTitleFormattedAsHeading,
   addParagraph,
+  paragraphRows,
   fillCta,
   fillNodeTitle,
   setEditorByFieldName,
   addDocumentsParagraph,
+  addAccordionParagraph,
+  addImageVideoParagraph,
+  addCallToActionParagraph,
+  addPartnersLogoParagraph,
+  addEmbedParagraph,
+  addDualColumnParagraph,
+  addMultiCardParagraph,
+  addChatbotCtaParagraph,
+  addNewsletterSignupParagraph,
+  addResourcesMenuParagraph,
+  addWebformParagraph,
   addTextParagraph,
   createLandingPage,
   createResource,
+  fillResourceReference,
+  createResourceCollection,
   expectBlankSubmitBlockedByBrowser,
 };
