@@ -59,6 +59,15 @@ const AUTH_SPECS = [
   '**/verify-users-can-view-landing-page-content-on-fe.spec.js',
   '**/verify-users-can-edit-landing-pages.spec.js',
   '**/verify-user-is-able-to-delete-landing-pages.spec.js',
+  '**/verify-mandatory-fields-on-resource-page-creation.spec.js',
+  '**/verify-users-can-view-resource-content-on-fe.spec.js',
+  '**/verify-users-are-able-to-edit-resource-pages.spec.js',
+  '**/verify-user-is-able-to-delete-resource-pages.spec.js',
+  '**/verify-mandatory-fields-on-additional-content-type-creation.spec.js',
+  '**/verify-users-can-view-additional-content-type-on-fe.spec.js',
+  '**/verify-user-is-able-to-delete-additional-content-type.spec.js',
+  '**/verify-paragraphs-components-functionality.spec.js',
+  '**/verify-admin-can-create-site-admin-user.spec.js',
 ];
 
 /**
