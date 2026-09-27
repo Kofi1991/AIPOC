@@ -221,6 +221,12 @@ Alongside the pipeline, **[Dr.Git](.github/agents/DrGit.agent.md)** handles all 
 grouping changes into logical commits, keeping secrets and run artifacts out of them,
 pushing and opening pull requests — and only when asked.
 
+For grinding through a backlog of similar cases, **[Runner](.github/agents/Runner.agent.md)**
+sequences steps 1–4 above end-to-end — Planner picks a batch (2 not-yet-automated cases by
+default), QA reviews it, Engineer generates and runs it, QA tags what passed — so the user
+isn't manually relaying each handoff for every batch. It never touches TestCollab or the live
+site itself, and it never invokes Dr.Git on its own.
+
 A spec's own header comment (`// spec: specs/tc-<id>-...-plan.md`) is the traceability
 link back to its plan and TestCollab case — spec filenames are based on the test title,
 not the TC ID.
@@ -259,6 +265,10 @@ to "write tests":
   and any value from `.env` — also enforced by a pre-commit hook and a scrub filter that keeps real credentials in `promptfooconfig.yaml` out of commits while leaving your local copy alone; both installed by `tools/install-git-hooks.sh`), splits work
   into logical commits, never adds AI attribution to commits or PRs, and won't push,
   force-push or hard-reset without an explicit instruction.
+- **Runner** doesn't reinterpret or loosen any other agent's rules — it just supplies each
+  agent's input from the previous step's output. It stops and reports rather than guessing
+  when Planner blocks a case, QA and Planner can't converge, or Engineer hits a real product
+  bug — and it never invokes Dr.Git itself, since committing stays an explicit ask.
 - **`playwright-test-healer`** fixes a failing spec without silently loosening its
   assertions.
 - **`playwright-test-planner` / `playwright-test-generator`** — the same plan → generate
