@@ -24,6 +24,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 JUNIT = os.path.join(ROOT, 'test-results', 'junit.xml')
 HISTORY = os.path.join(ROOT, 'reports', 'run-history.json')
 OUT = os.path.join(ROOT, 'reports', 'test-report.html')
+OUT_DIR = os.path.dirname(OUT)  # links in the report are resolved relative to here, not ROOT
 
 if not os.path.exists(JUNIT):
     print(f"JUnit file not found at {JUNIT}. Run tests first to generate test-results/junit.xml")
@@ -183,11 +184,11 @@ for c in cases:
             if not os.path.isabs(p):
                 p_candidate = os.path.join(ROOT, p)
                 if os.path.exists(p_candidate):
-                    href = os.path.relpath(p_candidate, ROOT)
+                    href = os.path.relpath(p_candidate, OUT_DIR)
                 else:
                     p2 = os.path.join(ROOT, 'test-results', p)
                     if os.path.exists(p2):
-                        href = os.path.relpath(p2, ROOT)
+                        href = os.path.relpath(p2, OUT_DIR)
                     else:
                         href = p
             else:
@@ -265,7 +266,12 @@ else:
                 if atts:
                     pieces = []
                     for a in atts:
-                        a_path = html.escape(a.get('path', ''))
+                        # Stored relative to ROOT (see tools/record_run_history.py); the report
+                        # itself lives in reports/, so re-root the link to that directory.
+                        raw_path = a.get('path', '')
+                        abs_path = os.path.join(ROOT, raw_path)
+                        rel_path = os.path.relpath(abs_path, OUT_DIR) if os.path.exists(abs_path) else raw_path
+                        a_path = html.escape(rel_path)
                         a_type = a.get('type', 'file')
                         display = html.escape(os.path.basename(a.get('path', '')))
                         if a_type == 'screenshot':
