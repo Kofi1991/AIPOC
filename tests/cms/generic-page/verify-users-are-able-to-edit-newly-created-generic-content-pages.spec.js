@@ -12,7 +12,7 @@ test.describe('Generic Page Editing', { tag: ['@regression'] }, () => {
     await logout(page);
   });
 
-  test('Verify Users Are Able to Edit Newly Created Generic Content Pages.', async ({ page }) => {
+  test('Verify Users Are Able to Edit Newly Created Generic Content Pages', async ({ page }) => {
     // GIVEN the User is logged in as an Admin
     await login(page, process.env.TC_ADMIN_USER, process.env.TC_ADMIN_PASS);
 

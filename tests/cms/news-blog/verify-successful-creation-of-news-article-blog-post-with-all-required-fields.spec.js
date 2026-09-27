@@ -13,7 +13,7 @@ test.afterEach(async ({ page }) => {
   await authHelper.logout(page);
 });
 
-test('Verify successful creation of News article / Blog post with all required fields', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
+test('Verify successful creation of News article / Blog post with all required fields', { tag: ['@regression'] }, async ({ page }) => {
   test.setTimeout(120_000); // multi-step content creation incl. the media-library modal
 
   // Blog post test data

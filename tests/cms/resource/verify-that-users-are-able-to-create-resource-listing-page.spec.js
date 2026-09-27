@@ -15,12 +15,12 @@ const {
   openGenericPageForm, createGenericPage,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Resource Creation', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Resource Creation', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });
 
-  test('Verify That Users Are Able To Create Resource Listing Page.', async ({ page }) => {
+  test('Verify That Users Are Able To Create Resource Listing Page', async ({ page }) => {
     test.setTimeout(120_000);
 
     // GIVEN the User is logged in as an Admin

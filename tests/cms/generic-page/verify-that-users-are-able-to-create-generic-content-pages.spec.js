@@ -10,14 +10,14 @@ const {
   expectLatestNewsAndBlogsParagraphVisible,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Generic Page Creation', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Generic Page Creation', { tag: ['@regression'] }, () => {
   // Each auth test runs in its own isolated (incognito) context: log in fresh here,
   // log out afterwards so the account's single session slot is released.
   test.afterEach(async ({ page }) => {
     await logout(page);
   });
 
-  test('Verify That Users Are Able To Create  Generic Content Pages.', async ({ page }) => {
+  test('Verify That Users Are Able To Create Generic Content Pages', async ({ page }) => {
     // GIVEN the User is logged in as an Admin
     await login(page, process.env.TC_ADMIN_USER, process.env.TC_ADMIN_PASS);
 

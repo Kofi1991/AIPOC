@@ -15,12 +15,12 @@ const {
   openGenericPageForm, createGenericPage,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Landing Page Creation', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Landing Page Creation', { tag: ['@regression'] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });
 
-  test('Verify That Users Are Able To Create  Landing Content Page', async ({ page }) => {
+  test('Verify That Users Are Able To Create Landing Content Page', async ({ page }) => {
     test.setTimeout(120_000);
 
     // GIVEN the User is logged in as an Admin

@@ -10,7 +10,7 @@ const {
   expectBlankSubmitBlockedByBrowser, deleteQuietly,
 } = require('../../helpers/contentTypeHelper');
 
-test.describe('Landing Page Validation (BBD)', { tag: ['@regression'] }, () => {
+test.describe('Landing Page Validation (BBD)', { tag: [] }, () => {
   test.afterEach(async ({ page }) => {
     await logout(page);
   });

@@ -12,7 +12,7 @@ const {
   expectContentItemAbsentFromList,
 } = require('../../helpers/contentPageHelper');
 
-test.describe('Generic Page Deletion', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Generic Page Deletion', { tag: ['@regression'] }, () => {
   // Each auth test runs in its own isolated (incognito) context: log in fresh here,
   // log out afterwards so the account's single session slot is released.
   test.afterEach(async ({ page }) => {
