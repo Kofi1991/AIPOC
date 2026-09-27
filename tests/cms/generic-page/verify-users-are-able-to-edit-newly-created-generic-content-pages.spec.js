@@ -29,7 +29,9 @@ test.describe('Generic Page Editing', { tag: ['@regression'] }, () => {
     await page.getByRole('button', { name: 'Save & Close' }).first().click();
 
     // THEN the changes will be reflected on the page
-    await expect(page).toHaveURL(/\/admin\/content$/);
+    // editContentItemFromList filters the list by the (now-stale) old title before clicking Edit,
+    // so Save & Close correctly returns to that filtered URL, not a bare /admin/content.
+    await expect(page).toHaveURL(/\/admin\/content(\?|$)/);
     // The "has been updated" message isn't asserted: it lives in the Drupal session, which specs
     // share via TC_ADMIN_SESSION, so another tab can show it instead. The row below is durable proof.
     await expect(page.locator('tr', { hasText: newTitle })).toBeVisible();
