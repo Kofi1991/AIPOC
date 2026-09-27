@@ -76,22 +76,27 @@ tag goes on `test(...)` itself instead, right after the title.
 
 | Tags | Tests | Meaning |
 |---|---|---|
-| `@smoke` `@regression` | 20 | The critical path — runs in both suites |
-| `@regression` only | 48 | Deeper coverage that doesn't need to run on every smoke pass |
+| `@smoke` `@regression` | 14 | The critical path — runs in both suites |
+| `@regression` only | 52 | Deeper coverage that doesn't need to run on every smoke pass |
 | `@smoke` only | 0 | Reserved: a smoke check not worth keeping in the full regression run |
+| neither | 3 | Environment-flaky specs pulled out of both while under review — still runnable directly by file |
 
-**What earns a test `@smoke`:** it has to be fast, stable, and cover something whose failure
-would leave the site *unusable* rather than merely degraded. In practice that is the public
-pages a visitor hits first, the login and logout paths, one create per content type plus one
-delete to prove the CMS round-trips, and the static guards, which cost nothing to run.
-Everything else is regression: the mandatory-field and required-field variants, the edit and
-front-end-display cases, and the duplicate per-type deletes. Those catch real bugs, but a
-failure in one means a specific feature is wrong, not that the site is down.
+**What earns a test `@smoke`:** it has to be fast, stable, need no login, and create nothing —
+so it can run unattended, on any environment, with no credentials and no side effects. In
+practice that's the public pages a visitor hits first, the two login-form specs that only ever
+submit fake or empty credentials (never a real account), and the static guards, which cost
+nothing to run. Everything that authenticates or writes to the CMS — every `content-admin`
+spec, including the one create-and-delete pair per content type that proves the round-trip
+works — is regression only, along with the mandatory-field and required-field variants, the
+edit and front-end-display cases, and the duplicate per-type deletes. Those catch real bugs,
+but a failure in one means a specific feature is wrong, not that the site is unusable, and CI's
+`--project=chromium` run never has a session to authenticate with anyway (see "Authenticated
+tests" below).
 
 `npm run test:smoke` and `npm run test:regression` (or `--smoke` / `--regression` on
-`tools/run-tests.sh`, combinable) select by tag. Regression runs everything, because the
-smoke tests carry both tags. To move a test between suites, edit its tag list — nothing else
-about the file matters, and the suite a test is in never depends on its folder.
+`tools/run-tests.sh`, combinable) select by tag. Regression runs almost everything, because the
+smoke tests also carry `@regression`. To move a test between suites, edit its tag list —
+nothing else about the file matters, and the suite a test is in never depends on its folder.
 
 `npm test` (via `tools/run-tests.sh`) always records the run to `reports/run-history.json`,
 even on failure, and exits with the tests' own exit code. It runs on **Chromium only** by

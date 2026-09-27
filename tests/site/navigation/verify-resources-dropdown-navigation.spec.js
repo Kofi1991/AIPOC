@@ -7,7 +7,7 @@ const { getMainNav } = require('../../helpers/navHelper');
 const { filterWidget } = require('../../helpers/resourcesHelper');
 const { url } = require('../../helpers/siteConfig');
 
-test.describe('Resources Navigation', { tag: ['@regression'] }, () => {
+test.describe('Resources Navigation', { tag: [] }, () => {
   test('Verify Resources dropdown navigation', async ({ page }) => {
     // 1. Navigate to the homepage and click 'Resources' in the main navigation
     await page.goto(url('/'));

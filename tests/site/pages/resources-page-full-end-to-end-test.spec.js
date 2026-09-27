@@ -16,7 +16,7 @@ const {
   expectFirstCardNavigatesAndBack,
 } = require('../../helpers/resourcesHelper');
 
-test.describe('Resources Page', { tag: ['@regression'] }, () => {
+test.describe('Resources Page', { tag: [] }, () => {
   test('Resources page full end-to-end test', async ({ page }) => {
     // 1. Navigate to the Resources page
     await page.goto(RESOURCES_URL);

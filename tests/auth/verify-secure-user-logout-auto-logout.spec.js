@@ -8,7 +8,7 @@ const { test, expect } = require('@playwright/test');
 const { login, logout } = require('../helpers/authHelper');
 const { url } = require('../helpers/siteConfig');
 
-test.describe('Secure User Logout / Auto Logout', { tag: ['@smoke', '@regression'] }, () => {
+test.describe('Secure User Logout / Auto Logout', { tag: ['@regression'] }, () => {
   test('Verify Secure User Logout / Auto logout', async ({ page }) => {
     // 1. Given the User logged in as an Admin, when I manually log out
     await login(page, process.env.TC_ADMIN_USER, process.env.TC_ADMIN_PASS);
