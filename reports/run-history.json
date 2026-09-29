@@ -27653,6 +27653,199 @@
           ]
         }
       ]
+    },
+    {
+      "run_id": "2026-09-28T12-47-37+00-00",
+      "timestamp": "2026-09-28T12:47:37+00:00",
+      "base_url": "https://test.registertovote.london",
+      "total": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 45.73,
+      "browsers": {
+        "chromium": {
+          "total": 14,
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0
+        }
+      },
+      "failures": [],
+      "tests": [
+        {
+          "name": "Login \u203a Attempt to login with invalid credentials",
+          "classname": "auth/attempt-to-login-with-invalid-credentials.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 4.645,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/auth-attempt-to-login-with-077d4-in-with-invalid-credentials-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Login \u203a Login attempt with empty credentials",
+          "classname": "auth/login-attempt-with-empty-credentials.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 1.332,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/auth-login-attempt-with-em-cf248-empt-with-empty-credentials-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "no hardcoded credential literals passed to auth helpers",
+          "classname": "guards/no-hardcoded-credentials.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 0.015,
+          "attachments": []
+        },
+        {
+          "name": "every spec names the TestCollab case it automates",
+          "classname": "guards/spec-traceability.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 0.003,
+          "attachments": []
+        },
+        {
+          "name": "Navigation menu links accessibility",
+          "classname": "site/navigation/navigation-menu-links-accessibility.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 11.007,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-navigation-navigation-119ee-on-menu-links-accessibility-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Breadcrumb \u203a Verify breadcrumb navigation functions correctly",
+          "classname": "site/navigation/verify-breadcrumb-navigation-functions-correctly.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 2.915,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-navigation-verify-bre-880dc-igation-functions-correctly-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Header and Main Menu \u203a Verify Header and Main Menu Appear",
+          "classname": "site/navigation/verify-header-and-main-menu-appear.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 2.04,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-navigation-verify-hea-aa521-Header-and-Main-Menu-Appear-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Main Navigation \u203a Verify submenu navigation for How to vote section",
+          "classname": "site/navigation/verify-submenu-navigation-for-how-to-vote-section.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 2.911,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-navigation-verify-sub-00daa-ion-for-How-to-vote-section-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Homepage Featured News \u203a Homepage - 'Featured news' section",
+          "classname": "site/pages/featured-news-section.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 2.673,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-pages-featured-news-s-36039-age---Featured-news-section-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Homepage Footer \u203a Homepage footer - GLA branding, address, and link columns",
+          "classname": "site/pages/footer.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 2.934,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-pages-footer-Homepage-a2320-ng-address-and-link-columns-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Translate Functionality \u203a Translate functionality",
+          "classname": "site/pages/translate-functionality.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 1.875,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-pages-translate-funct-a40a9-ity-Translate-functionality-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Contact Us Page \u203a Verify Contact us page displays correct information",
+          "classname": "site/pages/verify-contact-us-page-displays-correct-information.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 2.389,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-pages-verify-contact--2a13a-isplays-correct-information-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Homepage \u203a Verify expandable accordion functionality for voting steps",
+          "classname": "site/pages/verify-expandable-accordion-functionality-for-voting-steps.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 3.316,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-pages-verify-expandab-6087c-ctionality-for-voting-steps-chromium/video.webm"
+            }
+          ]
+        },
+        {
+          "name": "Search Functionality \u203a Verify search functionality returns relevant results",
+          "classname": "site/search/verify-search-functionality-returns-relevant-results.spec.js",
+          "browser": "chromium",
+          "status": "passed",
+          "time": 7.675,
+          "attachments": [
+            {
+              "type": "video",
+              "path": "reports/run-history-artifacts/2026-09-28T12-47-37+00-00/site-search-verify-search--282c1-ty-returns-relevant-results-chromium/video.webm"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
